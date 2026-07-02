@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;0,900;1,500;1,600;1,700&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<title>Crunch &amp; Crumbs — Homemade Cookies &amp; Authentic Nigerian Chinchin</title>
+<meta name="description" content="Crunch &amp; Crumbs bakes homemade cookies and authentic Nigerian chinchin fresh in South Africa. Order on WhatsApp — free delivery on orders over R200.">
+<meta name="theme-color" content="#3A2416">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Crunch &amp; Crumbs">
+<meta property="og:title" content="Crunch &amp; Crumbs — Homemade Cookies &amp; Chinchin">
+<meta property="og:description" content="Homemade cookies and authentic Nigerian chinchin, baked fresh in South Africa. Order on WhatsApp.">
+<meta property="og:image" content="assets/products/hero-composed.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Crunch &amp; Crumbs — Homemade Cookies &amp; Chinchin">
+<meta name="twitter:description" content="Homemade cookies and authentic Nigerian chinchin, baked fresh in South Africa. Order on WhatsApp.">
+<meta name="twitter:image" content="assets/products/hero-composed.jpg">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; }
+  .cc-nav-link { position: relative; }
+  .cc-nav-link::after { content:""; position:absolute; left:0; bottom:-6px; height:2px; width:0; background:#C8912F; transition:width .25s ease; }
+  .cc-nav-link:hover::after { width:100%; }
+  .cc-btn { transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease; }
+  .cc-btn:hover { transform: translateY(-2px); }
+  .cc-prod-card { transition: transform .25s ease, box-shadow .25s ease; }
+  .cc-prod-card:hover { transform: translateY(-6px); box-shadow: 0 22px 44px rgba(58,36,22,.16); }
+  .cc-prod-card:hover .cc-prod-img::after { opacity:1; }
+  .cc-fade { opacity:0; transform: translateY(22px); animation: ccUp .8s cubic-bezier(.2,.7,.2,1) forwards; }
+  @keyframes ccUp { to { opacity:1; transform:none; } }
+  image-slot { display:block; }
+  .cc-burger { display:none; }
+  .cc-mobile-menu { display:none; }
+  @media (max-width: 980px) {
+    .cc-nav { display:none !important; }
+    .cc-burger { display:flex !important; }
+    .cc-head-icons { margin-left:auto !important; }
+    .cc-hero-grid { padding-top:56px !important; padding-bottom:120px !important; }
+    .cc-hero-h1 { font-size:44px !important; }
+    .cc-feat { grid-template-columns:repeat(2,1fr) !important; gap:26px 0 !important; }
+    .cc-feat > div:nth-child(2) { border-right:none !important; }
+    .cc-prod-grid { grid-template-columns:repeat(3,1fr) !important; }
+    .cc-story { grid-template-columns:1fr !important; }
+    .cc-story-img { min-height:320px !important; }
+    .cc-story-text { padding:48px 36px !important; }
+    .cc-testi { grid-template-columns:1fr !important; }
+    .cc-giftbox { min-height:280px !important; order:2; }
+    .cc-foot { grid-template-columns:repeat(2,1fr) !important; }
+  }
+  @media (max-width: 640px) {
+    .cc-ann-center { display:none !important; }
+    .cc-hero-h1 { font-size:34px !important; }
+    .cc-hero-scrim { background:linear-gradient(180deg, rgba(30,17,9,.92) 0%, rgba(35,21,12,.82) 42%, rgba(40,26,15,.35) 100%) !important; }
+    .cc-hero-bg { object-position:75% 100% !important; }
+    .cc-hero-grid { padding-bottom:220px !important; }
+    .cc-hero-btns { flex-direction:column !important; align-items:stretch !important; }
+    .cc-hero-btns a { justify-content:center !important; }
+    .cc-feat { grid-template-columns:1fr !important; }
+    .cc-feat > div { border-right:none !important; border-bottom:1px solid rgba(58,36,22,.08); padding-bottom:22px; }
+    .cc-feat > div:last-child { border-bottom:none; padding-bottom:0; }
+    .cc-best-head { flex-direction:column !important; align-items:flex-start !important; }
+    .cc-prod-grid { grid-template-columns:repeat(2,1fr) !important; }
+    .cc-story-text { padding:40px 24px !important; }
+    .cc-testi-pad { padding:48px 20px !important; }
+    .cc-tcard { flex-basis:100% !important; }
+    .cc-testi-arrows { display:none !important; }
+    .cc-cta { flex-direction:column !important; text-align:center !important; }
+    .cc-cta > div:first-child p { margin-left:auto !important; margin-right:auto !important; }
+    .cc-foot { grid-template-columns:1fr !important; }
+    .cc-sec-pad { padding-left:20px !important; padding-right:20px !important; }
+  }
+  @media (min-width: 981px) { .cc-mobile-menu { display:none !important; } }
+  .cc-shop-menu { opacity:0; visibility:hidden; transform:translateY(6px); transition:opacity .18s ease, transform .18s ease, visibility .18s; }
+  .cc-shop:hover .cc-shop-menu, .cc-shop:focus-within .cc-shop-menu { opacity:1; visibility:visible; transform:translateY(0); }
+  .cc-shop-item:hover { background:#F6F1E8; color:#C8912F !important; }
+</style>
+</helmet>
+
+<div style="font-family:'Poppins',sans-serif; background:#F6F1E8; color:#2B2318; overflow-x:hidden;">
+
+  <!-- ===== ANNOUNCEMENT BAR ===== -->
+  <div style="background:#2A1A10; color:#EFE3D2; font-size:12.5px; letter-spacing:.02em;">
+    <div style="max-width:1240px; margin:0 auto; padding:9px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="color:#D9A441;">✦</span>
+        <span style="font-weight:500;">FREE DELIVERY for orders over R200</span>
+      </div>
+      <div class="cc-ann-center" style="font-weight:400; opacity:.9;">Homemade with love in South Africa 🇿🇦</div>
+      <div style="display:flex; align-items:center; gap:14px; color:#D9A441;">
+        <a href="{{ instagram }}" target="_blank" rel="noopener" style="color:inherit; display:flex;" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="{{ facebook }}" target="_blank" rel="noopener" style="color:inherit; display:flex;" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V5h-3c-2.2 0-4 1.8-4 4v2H7v4h3v6h4v-6h3l1-4h-4V9c0-.6.4-1 1-1z"/></svg></a>
+        <a href="{{ tiktok }}" target="_blank" rel="noopener" style="color:inherit; display:flex;" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 3c.3 2.2 1.6 3.8 3.8 4v3c-1.4 0-2.7-.4-3.8-1.1V15a6 6 0 1 1-6-6c.3 0 .7 0 1 .1v3.1a3 3 0 1 0 2 2.8V3h3z"/></svg></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <span id="top"></span>
+  <header style="position:sticky; top:0; z-index:50; background:#F6F1E8; border-bottom:1px solid rgba(58,36,22,.08); box-shadow:0 4px 20px rgba(58,36,22,.05);">
+    <div style="max-width:1240px; margin:0 auto; padding:14px 28px; display:flex; align-items:center; gap:28px;">
+      <a href="#" style="display:flex; align-items:center; text-decoration:none;">
+        <img src="assets/logo.png" alt="Crunch & Crumbs" style="height:46px; width:auto; display:block;">
+      </a>
+      <nav class="cc-nav" style="display:flex; align-items:center; gap:26px; margin-left:auto; font-size:14px; font-weight:500;">
+        <a href="#top" class="cc-nav-link" style="color:#C8912F; text-decoration:none;">Home</a>
+        <span class="cc-shop" style="position:relative; display:inline-flex;">
+          <a href="#products" class="cc-nav-link" style="color:#3A2416; text-decoration:none; display:flex; align-items:center; gap:4px; cursor:pointer;">Shop <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></a>
+          <span class="cc-shop-menu" style="position:absolute; top:calc(100% + 14px); left:50%; transform:translateX(-50%); min-width:190px; background:#FFFDF9; border-radius:12px; box-shadow:0 18px 40px rgba(58,36,22,.18); padding:8px; display:flex; flex-direction:column; z-index:60;">
+            <a href="#products" class="cc-shop-item" style="padding:10px 14px; border-radius:8px; text-decoration:none; color:#3A2416; font-size:13.5px;">Cookies</a>
+            <a href="#products" class="cc-shop-item" style="padding:10px 14px; border-radius:8px; text-decoration:none; color:#3A2416; font-size:13.5px;">Chinchin</a>
+            <a href="#products" class="cc-shop-item" style="padding:10px 14px; border-radius:8px; text-decoration:none; color:#3A2416; font-size:13.5px;">Gift Boxes</a>
+            <a href="#products" class="cc-shop-item" style="padding:10px 14px; border-radius:8px; text-decoration:none; color:#3A2416; font-size:13.5px;">Combo Packs</a>
+          </span>
+        </span>
+        <a href="#products" class="cc-nav-link" style="color:#3A2416; text-decoration:none;">Gift Boxes</a>
+        <a href="{{ waCorporate }}" target="_blank" rel="noopener" class="cc-nav-link" style="color:#3A2416; text-decoration:none;">Corporate Orders</a>
+        <a href="#story" class="cc-nav-link" style="color:#3A2416; text-decoration:none;">About Us</a>
+        <a href="#products" class="cc-nav-link" style="color:#3A2416; text-decoration:none;">Gallery</a>
+        <a href="#contact" class="cc-nav-link" style="color:#3A2416; text-decoration:none;">Contact</a>
+      </nav>
+      <div class="cc-head-icons" style="display:flex; align-items:center; gap:18px; color:#3A2416;">
+        <button onClick="{{ toggleSearch }}" class="cc-btn" style="background:none; border:none; cursor:pointer; color:inherit; display:flex; padding:0;" aria-label="Search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></button>
+        <button onClick="{{ toggleCart }}" class="cc-btn" style="background:none; border:none; cursor:pointer; color:inherit; display:flex; position:relative; padding:0;" aria-label="Cart">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span style="position:absolute; top:-8px; right:-9px; min-width:17px; height:17px; padding:0 4px; border-radius:9px; background:#C8912F; color:#fff; font-size:10.5px; font-weight:600; display:{{ cartBadgeDisplay }}; align-items:center; justify-content:center;">{{ cart }}</span>
+        </button>
+        <button onClick="{{ toggleMenu }}" class="cc-burger cc-btn" style="background:none; border:none; cursor:pointer; color:#3A2416; padding:0; align-items:center;" aria-label="Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="cc-search-bar" style="display:{{ searchDisplay }}; align-items:center; gap:10px; background:#F6F1E8; border-top:1px solid rgba(58,36,22,.08); padding:0 28px;">
+      <form onSubmit="{{ runSearch }}" style="display:flex; align-items:center; gap:10px; max-width:1240px; margin:0 auto; width:100%; padding:14px 0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A7A64" stroke-width="2" style="flex-shrink:0;"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input ref="{{ setSearchRef }}" type="search" placeholder="Search cookies, chinchin, gift boxes…" style="flex:1; min-width:0; background:transparent; border:none; outline:none; font-family:inherit; font-size:15px; color:#3A2416;">
+        <button type="submit" class="cc-btn" style="background:#C8912F; border:none; cursor:pointer; color:#fff; border-radius:30px; padding:9px 20px; font-weight:600; font-size:13px; font-family:inherit;">Search</button>
+      </form>
+    </div>
+    <div class="cc-mobile-menu" style="display:{{ menuDisplay }}; flex-direction:column; background:#F6F1E8; border-top:1px solid rgba(58,36,22,.08); padding:8px 24px 18px;">
+      <sc-for list="{{ mobileLinks }}" as="m" hint-placeholder-count="7">
+        <a href="{{ m.href }}" onClick="{{ closeMenu }}" style="padding:13px 4px; text-decoration:none; font-size:15px; font-weight:500; color:#3A2416; border-bottom:1px solid rgba(58,36,22,.06);">{{ m.label }}</a>
+      </sc-for>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section style="background:#2A1A10; color:#F6EBD9; position:relative; overflow:hidden;">
+    <image-slot id="cc-hero" src="assets/products/hero-composed.jpg" class="cc-hero-bg" fit="cover" position="70% 50%" style="position:absolute; inset:0; width:100%; height:100%;" shape="rect" placeholder="Drop hero background photo"></image-slot>
+    <div class="cc-hero-scrim" style="position:absolute; inset:0; background:linear-gradient(90deg, rgba(30,17,9,.94) 0%, rgba(35,21,12,.86) 34%, rgba(40,26,15,.45) 60%, rgba(40,26,15,.05) 100%); pointer-events:none;"></div>
+    <div class="cc-hero-grid" style="position:relative; z-index:2; max-width:1240px; margin:0 auto; padding:96px 28px 150px; display:grid; grid-template-columns:minmax(0,600px); align-items:center;">
+      <div class="cc-fade">
+        <div style="font-family:'Dancing Script',cursive; font-size:26px; color:#E0AF52; margin-bottom:8px; display:flex; align-items:center; gap:8px;">Freshly Baked <span style="font-size:18px;">♡</span></div>
+        <h1 class="cc-hero-h1" style="font-family:'Playfair Display',serif; font-weight:800; font-size:60px; line-height:1.04; margin:0 0 22px; letter-spacing:-.01em;">
+          Cookies &amp;<br>Authentic<br><span style="color:#E0AF52;">Nigerian Chinchin</span>
+        </h1>
+        <p style="font-size:16px; line-height:1.6; color:#D8C7AE; max-width:420px; margin:0 0 30px;">Homemade with love. Crafted for every celebration, snack break, and special moment.</p>
+        <div class="cc-hero-btns" style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:44px;">
+          <a href="{{ waGeneral }}" target="_blank" rel="noopener" class="cc-btn" style="display:flex; align-items:center; gap:10px; background:#C8912F; color:#fff; text-decoration:none; padding:15px 26px; border-radius:40px; font-weight:600; font-size:14px; box-shadow:0 12px 26px rgba(200,145,47,.35);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5L8.9 7c-.2-.6-.5-.5-.7-.5H7.7c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3M12 0C5.4 0 .2 5.3.2 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.3-1.7c1.7.9 3.6 1.4 5.6 1.4 6.6 0 11.9-5.3 11.9-11.9C23.8 5.3 18.6 0 12 0z"/></svg>
+            ORDER ON WHATSAPP
+          </a>
+          <a href="#products" class="cc-btn" style="display:flex; align-items:center; gap:8px; background:transparent; color:#F6EBD9; text-decoration:none; padding:15px 26px; border-radius:40px; font-weight:600; font-size:14px; border:1.5px solid rgba(246,235,217,.5);">VIEW OUR PRODUCTS</a>
+        </div>
+        <div style="display:flex; gap:34px; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="width:34px; height:34px; border:1.5px solid rgba(224,175,82,.55); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#E0AF52; flex-shrink:0;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1.5 2 1.5 3.5 0 5.5S10.5 11 12 13"/><path d="M5 21c0-4 3-6 7-6s7 2 7 6z"/><path d="M8 9c-1 1-1 2 0 3"/><path d="M16 9c1 1 1 2 0 3"/></svg>
+            </span>
+            <span style="line-height:1.15;">
+              <span style="display:block; font-size:13px; font-weight:600; color:#F6EBD9;">Freshly Made</span>
+              <span style="display:block; font-size:11px; color:#B49B7C;">In Small Batches</span>
+            </span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="width:34px; height:34px; border:1.5px solid rgba(224,175,82,.55); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#E0AF52; flex-shrink:0;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 20.4 6.8 23.2l1-5.8L3.5 8.2l5.9-.9z"/></svg>
+            </span>
+            <span style="line-height:1.15;">
+              <span style="display:block; font-size:13px; font-weight:600; color:#F6EBD9;">Premium</span>
+              <span style="display:block; font-size:11px; color:#B49B7C;">Quality Ingredients</span>
+            </span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="width:34px; height:34px; border:1.5px solid rgba(224,175,82,.55); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#E0AF52; flex-shrink:0;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5z"/><path d="M9 12l2 2 4-4"/></svg>
+            </span>
+            <span style="line-height:1.15;">
+              <span style="display:block; font-size:13px; font-weight:600; color:#F6EBD9;">Hygienic</span>
+              <span style="display:block; font-size:11px; color:#B49B7C;">&amp; Clean Production</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURE STRIP ===== -->
+  <div style="max-width:1180px; margin:-70px auto 0; padding:0 28px; position:relative; z-index:20;">
+    <div class="cc-feat" style="background:#FFFDF9; border-radius:18px; box-shadow:0 24px 50px rgba(58,36,22,.14); display:grid; grid-template-columns:repeat(4,1fr); padding:34px 20px;">
+      <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; padding:0 20px; border-right:1px solid rgba(58,36,22,.08);">
+        <span style="color:#3A2416; display:flex;" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="13" height="10" rx="1"/><path d="M14 9h4l3 3v4h-7z"/><circle cx="6" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg></span>
+        <span style="font-weight:600; font-size:15px; color:#2B2318;">Fast Delivery</span>
+        <span style="font-size:12.5px; color:#8A7A64; line-height:1.4;">Quick &amp; reliable delivery to you</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; padding:0 20px; border-right:1px solid rgba(58,36,22,.08);">
+        <span style="color:#3A2416; display:flex;" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <span style="font-weight:600; font-size:15px; color:#2B2318;">Secure Packaging</span>
+        <span style="font-size:12.5px; color:#8A7A64; line-height:1.4;">Keeps every bite fresh &amp; crunchy</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; padding:0 20px; border-right:1px solid rgba(58,36,22,.08);">
+        <span style="color:#3A2416; display:flex;" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M3 12h18M12 8v13M12 8S9 3 6.5 4.5 8 8 12 8zM12 8s3-5 5.5-3.5S16 8 12 8z"/></svg></span>
+        <span style="font-weight:600; font-size:15px; color:#2B2318;">Perfect for Gifting</span>
+        <span style="font-size:12.5px; color:#8A7A64; line-height:1.4;">Beautiful packs for every occasion</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; padding:0 20px; border-right:none;">
+        <span style="color:#3A2416; display:flex;" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21C7 17 3 13.5 3 9a4.5 4.5 0 0 1 9-1 4.5 4.5 0 0 1 9 1c0 4.5-4 8-9 12z"/></svg></span>
+        <span style="font-weight:600; font-size:15px; color:#2B2318;">Made with Love</span>
+        <span style="font-size:12.5px; color:#8A7A64; line-height:1.4;">Crafted with passion in every batch</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BESTSELLERS ===== -->
+  <section id="products" class="cc-sec-pad" style="max-width:1240px; margin:0 auto; padding:70px 28px 20px; scroll-margin-top:80px;">
+    <div style="font-family:'Dancing Script',cursive; font-size:26px; color:#C8912F; display:flex; align-items:center; gap:8px;">Our Bestsellers <span style="font-size:17px;">♡</span></div>
+    <div class="cc-best-head" style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-top:4px;">
+      <div>
+        <h2 style="font-family:'Playfair Display',serif; font-weight:800; font-size:38px; margin:0; color:#2B2318;">Cookies, Chinchin &amp; More</h2>
+        <p style="font-size:15px; color:#8A7A64; margin:8px 0 0;">Explore our most loved treats</p>
+      </div>
+      <a href="#" class="cc-btn" style="background:#C8912F; color:#fff; text-decoration:none; padding:13px 24px; border-radius:40px; font-weight:600; font-size:13px; box-shadow:0 10px 22px rgba(200,145,47,.3);">VIEW ALL PRODUCTS</a>
+    </div>
+
+    <div class="cc-prod-grid" style="display:grid; grid-template-columns:repeat(5,1fr); gap:20px; margin-top:34px;">
+      <sc-for list="{{ products }}" as="p" hint-placeholder-count="5">
+        <div class="cc-prod-card" style="background:#FFFDF9; border-radius:16px; overflow:hidden; box-shadow:0 8px 22px rgba(58,36,22,.08); display:flex; flex-direction:column;">
+          <image-slot id="{{ p.slot }}" src="{{ p.img }}" style="width:100%; height:180px;" shape="rect" placeholder="{{ p.name }}"></image-slot>
+          <div style="padding:16px 16px 18px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:8px; flex:1;">
+            <h3 style="font-family:'Playfair Display',serif; font-weight:700; font-size:16.5px; margin:0; color:#2B2318;">{{ p.name }}</h3>
+            <p style="font-size:12.5px; color:#8A7A64; line-height:1.45; margin:0; min-height:36px;">{{ p.desc }}</p>
+            <div style="font-size:13px; color:#5A4A38; margin-top:2px;">From <strong style="color:#C8912F; font-size:15px;">{{ p.price }}</strong></div>
+            <button onClick="{{ p.add }}" class="cc-btn" style="margin-top:6px; width:100%; display:flex; align-items:center; justify-content:center; gap:7px; background:{{ p.addedBg }}; color:#F6EBD9; border:none; cursor:pointer; padding:11px; border-radius:30px; font-weight:600; font-size:12px; font-family:inherit; transition:background .25s ease;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              {{ p.addedLabel }}
+            </button>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===== OUR STORY ===== -->
+  <section id="story" class="cc-story" style="display:grid; grid-template-columns:1fr 1fr; align-items:stretch; margin-top:60px; background:#FFFDF9; scroll-margin-top:80px;">
+    <image-slot id="cc-story" class="cc-story-img" src="assets/products/couple-baking.jpg" style="width:100%; min-height:520px;" shape="rect" placeholder="Drop bakers / kitchen photo"></image-slot>
+    <div class="cc-story-text" style="padding:64px 70px; display:flex; flex-direction:column; justify-content:center;">
+      <div style="font-family:'Dancing Script',cursive; font-size:25px; color:#C8912F;">Our Story</div>
+      <h2 style="font-family:'Playfair Display',serif; font-weight:800; font-size:34px; line-height:1.2; margin:6px 0 0; color:#2B2318;">Homemade Goodness,<br>Made for You</h2>
+      <div style="width:60px; height:3px; background:#C8912F; margin:20px 0;"></div>
+      <p style="font-size:14.5px; line-height:1.75; color:#6B5D4A; margin:0 0 30px; max-width:460px;">Crunch &amp; Crumbs began as a husband-and-wife dream to bring homemade goodness to families across South Africa and beyond. Every batch of cookies and chinchin is prepared with carefully selected ingredients, attention to detail, and a passion for quality.</p>
+      <div style="display:flex; gap:30px; flex-wrap:wrap; margin-bottom:34px;">
+        <div style="max-width:130px;">
+          <span style="color:#C8912F; display:block; margin-bottom:8px;" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13a8 8 0 0 0 16 0H4z"/><path d="M12 13V7M9 7c0-2 1.5-3 3-3s3 1 3 3"/></svg></span>
+          <span style="display:block; font-weight:600; font-size:13.5px; color:#2B2318; margin-bottom:3px;">Quality Ingredients</span>
+          <span style="display:block; font-size:12px; color:#8A7A64; line-height:1.45;">We use only the best ingredients.</span>
+        </div>
+        <div style="max-width:130px;">
+          <span style="color:#C8912F; display:block; margin-bottom:8px;" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21C7 17 3 13.5 3 9a4.5 4.5 0 0 1 9-1 4.5 4.5 0 0 1 9 1c0 4.5-4 8-9 12z"/></svg></span>
+          <span style="display:block; font-weight:600; font-size:13.5px; color:#2B2318; margin-bottom:3px;">Made with Love</span>
+          <span style="display:block; font-size:12px; color:#8A7A64; line-height:1.45;">Every treat is baked with passion.</span>
+        </div>
+        <div style="max-width:130px;">
+          <span style="color:#C8912F; display:block; margin-bottom:8px;" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M8.5 13.5L7 22l5-3 5 3-1.5-8.5"/></svg></span>
+          <span style="display:block; font-weight:600; font-size:13.5px; color:#2B2318; margin-bottom:3px;">Trusted by Many</span>
+          <span style="display:block; font-size:12px; color:#8A7A64; line-height:1.45;">Loved by customers across SA.</span>
+        </div>
+      </div>
+      <a href="#" class="cc-btn" style="align-self:flex-start; background:#C8912F; color:#fff; text-decoration:none; padding:14px 28px; border-radius:40px; font-weight:600; font-size:13px; box-shadow:0 10px 22px rgba(200,145,47,.3);">LEARN MORE ABOUT US</a>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="cc-testi" style="display:grid; grid-template-columns:1.55fr 1fr; align-items:stretch; background:#F6F1E8;">
+    <div class="cc-testi-pad" style="padding:64px 60px;">
+      <h2 style="font-family:'Playfair Display',serif; font-weight:800; font-size:34px; text-align:center; margin:0 0 6px; color:#2B2318;">Loved by Our Customers</h2>
+      <div style="width:60px; height:3px; background:#C8912F; margin:0 auto 40px;"></div>
+      <div style="position:relative;">
+        <button onClick="{{ prev }}" class="cc-btn cc-testi-arrows" style="position:absolute; left:-22px; top:50%; transform:translateY(-50%); z-index:5; width:40px; height:40px; border-radius:50%; border:none; cursor:pointer; background:#3A2416; color:#F6EBD9; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 18px rgba(58,36,22,.22);" aria-label="Previous"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button onClick="{{ next }}" class="cc-btn cc-testi-arrows" style="position:absolute; right:-22px; top:50%; transform:translateY(-50%); z-index:5; width:40px; height:40px; border-radius:50%; border:none; cursor:pointer; background:#3A2416; color:#F6EBD9; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 18px rgba(58,36,22,.22);" aria-label="Next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></button>
+        <div style="overflow:hidden; padding:12px 4px;">
+          <div style="display:flex; gap:20px; transition:transform .55s cubic-bezier(.2,.7,.2,1); transform:{{ trackTransform }};">
+          <sc-for list="{{ testimonials }}" as="t" hint-placeholder-count="3">
+          <div class="cc-tcard" style="flex:0 0 calc((100% - 40px)/3); background:#FFFDF9; border-radius:14px; padding:26px 22px; display:flex; flex-direction:column; gap:14px; transition:transform .5s ease, box-shadow .5s ease, opacity .5s ease; transform:scale({{ t.scale }}); box-shadow:{{ t.shadow }}; border:1.5px solid {{ t.border }}; opacity:{{ t.opacity }};">
+            <span style="font-family:'Playfair Display',serif; font-size:44px; line-height:.4; color:#E0C79A; height:22px;">&ldquo;</span>
+            <div style="color:#E0AF52; font-size:14px; letter-spacing:2px;">★★★★★</div>
+            <p style="font-size:13px; line-height:1.6; color:#5A4A38; margin:0; flex:1;">{{ t.text }}</p>
+            <div style="display:flex; align-items:center; gap:10px; margin-top:4px;">
+              <span style="width:38px; height:38px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-weight:700; font-size:15px; color:#3A2416; background:{{ t.avatarBg }}; box-shadow:inset 0 -2px 4px rgba(120,78,20,.25);">{{ t.initial }}</span>
+              <span style="font-size:12.5px; font-weight:600; color:#3A2416;">— {{ t.name }}</span>
+            </div>
+          </div>
+        </sc-for>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:center; gap:9px; margin-top:30px;">
+        <sc-for list="{{ dots }}" as="d" hint-placeholder-count="3">
+          <button onClick="{{ d.onClick }}" style="width:9px; height:9px; border-radius:50%; border:none; cursor:pointer; padding:0; background:{{ d.color }};"></button>
+        </sc-for>
+      </div>
+    </div>
+    <image-slot id="cc-giftbox" class="cc-giftbox" src="assets/products/gift-box.jpg" style="width:100%; min-height:100%;" shape="rect" placeholder="Drop gift box photo"></image-slot>
+  </section>
+
+  <!-- ===== CTA BAND ===== -->
+  <section style="background:linear-gradient(120deg,#3A2416,#4A2F1C); color:#F6EBD9; position:relative; overflow:hidden;">
+    <div class="cc-cta" style="max-width:1240px; margin:0 auto; padding:56px 28px; display:flex; align-items:center; justify-content:space-between; gap:30px; flex-wrap:wrap; position:relative;">
+      <div>
+        <h2 style="font-family:'Playfair Display',serif; font-weight:800; font-size:34px; margin:0 0 10px;">Ready to Treat Yourself?</h2>
+        <p style="font-size:14.5px; color:#D8C7AE; margin:0; max-width:400px; line-height:1.6;">Place your order now on WhatsApp and enjoy our delicious cookies &amp; chinchin.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
+        <a href="{{ waGeneral }}" target="_blank" rel="noopener" class="cc-btn" style="display:flex; align-items:center; gap:10px; background:#C8912F; color:#fff; text-decoration:none; padding:16px 32px; border-radius:40px; font-weight:600; font-size:14px; box-shadow:0 14px 30px rgba(200,145,47,.4);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5L8.9 7c-.2-.6-.5-.5-.7-.5H7.7c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3M12 0C5.4 0 .2 5.3.2 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.3-1.7c1.7.9 3.6 1.4 5.6 1.4 6.6 0 11.9-5.3 11.9-11.9C23.8 5.3 18.6 0 12 0z"/></svg>
+          ORDER VIA WHATSAPP
+        </a>
+        <span style="font-family:'Dancing Script',cursive; font-size:20px; color:#E0AF52; display:flex; align-items:center; gap:8px;">We can't wait to serve you! <span style="font-size:15px;">♡ ♡</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer id="contact" style="background:#241610; color:#C9B79F; font-size:13px; scroll-margin-top:80px;">
+    <div class="cc-foot" style="max-width:1240px; margin:0 auto; padding:56px 28px 30px; display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr 1.4fr; gap:36px;">
+      <div>
+        <div style="display:flex; align-items:center; margin-bottom:16px;">
+          <img src="assets/logo-light.png" alt="Crunch & Crumbs" style="height:52px; width:auto; display:block;">
+        </div>
+        <p style="line-height:1.7; color:#A8957C; max-width:270px; margin:0 0 16px;">Homemade cookies and authentic Nigerian chinchin, baked fresh with love in South Africa.</p>
+        <div style="display:flex; gap:12px;">
+          <a href="{{ instagram }}" target="_blank" rel="noopener" aria-label="Instagram" style="width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.06); display:flex; align-items:center; justify-content:center; color:#D9A441;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="{{ facebook }}" target="_blank" rel="noopener" aria-label="Facebook" style="width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.06); display:flex; align-items:center; justify-content:center; color:#D9A441;"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V5h-3c-2.2 0-4 1.8-4 4v2H7v4h3v6h4v-6h3l1-4h-4V9c0-.6.4-1 1-1z"/></svg></a>
+          <a href="{{ tiktok }}" target="_blank" rel="noopener" aria-label="TikTok" style="width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.06); display:flex; align-items:center; justify-content:center; color:#D9A441;"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 3c.3 2.2 1.6 3.8 3.8 4v3c-1.4 0-2.7-.4-3.8-1.1V15a6 6 0 1 1-6-6c.3 0 .7 0 1 .1v3.1a3 3 0 1 0 2 2.8V3h3z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4 style="color:#F6EBD9; font-size:14px; font-weight:600; margin:0 0 16px;">Quick Links</h4>
+        <div style="display:flex; flex-direction:column; gap:11px;">
+          <a href="#" style="color:#A8957C; text-decoration:none;">Home</a>
+          <a href="#" style="color:#A8957C; text-decoration:none;">Shop</a>
+          <a href="#" style="color:#A8957C; text-decoration:none;">Gift Boxes</a>
+          <a href="#" style="color:#A8957C; text-decoration:none;">Corporate Orders</a>
+          <a href="#" style="color:#A8957C; text-decoration:none;">About Us</a>
+        </div>
+      </div>
+      <div>
+        <h4 style="color:#F6EBD9; font-size:14px; font-weight:600; margin:0 0 16px;">Customer Care</h4>
+        <div style="display:flex; flex-direction:column; gap:11px;">
+          <a href="#" style="color:#A8957C; text-decoration:none;">FAQs</a>
+          <a href="#" style="color:#A8957C; text-decoration:none;">Delivery Information</a>
+          <a href="#" style="color:#A8957C; text-decoration:none;">Returns Policy</a>
+          <a href="#" style="color:#A8957C; text-decoration:none;">Track Order</a>
+          <a href="#" style="color:#A8957C; text-decoration:none;">Contact Us</a>
+        </div>
+      </div>
+      <div>
+        <h4 style="color:#F6EBD9; font-size:14px; font-weight:600; margin:0 0 16px;">Contact Us</h4>
+        <div style="display:flex; flex-direction:column; gap:11px; color:#A8957C;">
+          <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="color:#A8957C; text-decoration:none; display:flex; align-items:center; gap:8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#25D366"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5L8.9 7c-.2-.6-.5-.5-.7-.5H7.7c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3M12 0C5.4 0 .2 5.3.2 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.3-1.7c1.7.9 3.6 1.4 5.6 1.4 6.6 0 11.9-5.3 11.9-11.9C23.8 5.3 18.6 0 12 0z"/></svg>
+            WhatsApp: 078 289 0907
+          </a>
+          <a href="tel:+27782890907" style="color:#A8957C; text-decoration:none;">Call: +27 78 289 0907</a>
+          <a href="mailto:hello@crunchandcrumbs.co.za" style="color:#A8957C; text-decoration:none;">hello@crunchandcrumbs.co.za</a>
+          <span>Johannesburg, South Africa</span>
+        </div>
+      </div>
+      <div>
+        <h4 style="color:#F6EBD9; font-size:14px; font-weight:600; margin:0 0 16px;">Newsletter</h4>
+        <p style="color:#A8957C; line-height:1.6; margin:0 0 14px;">Subscribe for updates, offers and new product alerts.</p>
+        <sc-if value="{{ subscribed }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; align-items:center; gap:9px; background:rgba(37,211,102,.12); border:1px solid rgba(37,211,102,.4); border-radius:12px; padding:12px 14px; color:#DFF3E4;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            <span style="font-size:12.5px; line-height:1.4;">Thanks for subscribing! We'll be in touch.</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ notSubscribed }}" hint-placeholder-val="{{ true }}">
+          <form onSubmit="{{ subscribe }}" style="display:flex; gap:8px;">
+            <input name="email" type="email" required placeholder="Your email" style="flex:1; min-width:0; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:30px; padding:11px 16px; color:#F6EBD9; font-family:inherit; font-size:12.5px; outline:none;">
+            <button type="submit" class="cc-btn" style="background:#C8912F; border:none; cursor:pointer; color:#fff; border-radius:30px; padding:0 18px; font-weight:600; font-size:12.5px; font-family:inherit; white-space:nowrap;">Join</button>
+          </form>
+        </sc-if>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,.08);">
+      <div style="max-width:1240px; margin:0 auto; padding:18px 28px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:12px; color:#8A7862;">
+        <span>© 2026 Crunch &amp; Crumbs. All rights reserved.</span>
+        <span>Every bite tells a story.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== FLOATING CART BUTTON ===== -->
+  <button onClick="{{ toggleCart }}" aria-label="Open cart" style="position:fixed; right:22px; bottom:22px; z-index:80; display:{{ cartFloatDisplay }}; align-items:center; gap:10px; background:#C8912F; color:#fff; border:none; cursor:pointer; padding:14px 20px 14px 16px; border-radius:40px; font-family:inherit; font-weight:700; font-size:14px; box-shadow:0 14px 34px rgba(200,145,47,.5);">
+    <span style="position:relative; display:flex;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span style="position:absolute; top:-9px; right:-11px; min-width:19px; height:19px; padding:0 5px; border-radius:10px; background:#3A2416; color:#fff; font-size:11px; display:flex; align-items:center; justify-content:center;">{{ cart }}</span>
+    </span>
+    <span>View Order</span>
+  </button>
+
+  <!-- ===== CART OVERLAY + DRAWER ===== -->
+  <div onClick="{{ closeCart }}" style="position:fixed; inset:0; background:rgba(30,17,9,.5); z-index:90; display:{{ cartOverlayDisplay }};"></div>
+  <aside style="position:fixed; top:0; right:0; height:100%; width:390px; max-width:88vw; background:#FFFDF9; z-index:95; box-shadow:-18px 0 50px rgba(58,36,22,.25); transform:{{ cartPanelTransform }}; transition:transform .38s cubic-bezier(.2,.7,.2,1); display:flex; flex-direction:column; font-family:'Poppins',sans-serif;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:22px 24px; border-bottom:1px solid rgba(58,36,22,.1);">
+      <span style="font-family:'Playfair Display',serif; font-weight:700; font-size:20px; color:#2B2318;">Your Order</span>
+      <button onClick="{{ closeCart }}" class="cc-btn" style="background:none; border:none; cursor:pointer; color:#3A2416; display:flex; padding:0;" aria-label="Close cart">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:40px; text-align:center; color:#8A7A64;">
+        <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#D8C7AE" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span style="font-size:14px;">Your cart is empty.<br>Add some treats to get started!</span>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ cartHasItems }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1; overflow-y:auto; padding:8px 24px;">
+        <sc-for list="{{ cartLines }}" as="c" hint-placeholder-count="2">
+          <div style="display:flex; align-items:flex-start; gap:12px; padding:16px 0; border-bottom:1px solid rgba(58,36,22,.08);">
+            <div style="flex:1;">
+              <div style="font-family:'Playfair Display',serif; font-weight:700; font-size:14.5px; color:#2B2318;">{{ c.name }}</div>
+              <div style="font-size:12px; color:#8A7A64; margin-top:2px;">{{ c.unit }} each</div>
+              <div style="display:flex; align-items:center; gap:10px; margin-top:10px;">
+                <button onClick="{{ c.dec }}" class="cc-btn" style="width:26px; height:26px; border-radius:50%; border:1px solid rgba(58,36,22,.2); background:#fff; cursor:pointer; color:#3A2416; font-size:16px; line-height:1; display:flex; align-items:center; justify-content:center; font-family:inherit;">−</button>
+                <span style="min-width:18px; text-align:center; font-weight:600; font-size:14px; color:#2B2318;">{{ c.qty }}</span>
+                <button onClick="{{ c.inc }}" class="cc-btn" style="width:26px; height:26px; border-radius:50%; border:1px solid rgba(58,36,22,.2); background:#fff; cursor:pointer; color:#3A2416; font-size:15px; line-height:1; display:flex; align-items:center; justify-content:center; font-family:inherit;">+</button>
+              </div>
+            </div>
+            <div style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+              <span style="font-weight:700; font-size:14px; color:#C8912F;">{{ c.lineTotal }}</span>
+              <button onClick="{{ c.remove }}" class="cc-btn" style="background:none; border:none; cursor:pointer; color:#B0A08C; display:flex; padding:0;" aria-label="Remove item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14"/></svg>
+              </button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="padding:20px 24px 24px; border-top:1px solid rgba(58,36,22,.1); background:#F6F1E8;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+          <span style="font-size:14px; color:#6B5D4A;">Total</span>
+          <span style="font-family:'Playfair Display',serif; font-weight:800; font-size:24px; color:#2B2318;">{{ cartTotal }}</span>
+        </div>
+        <button onClick="{{ checkout }}" class="cc-btn" style="width:100%; display:flex; align-items:center; justify-content:center; gap:10px; background:#25D366; color:#fff; border:none; cursor:pointer; padding:15px; border-radius:40px; font-weight:700; font-size:14.5px; font-family:inherit; box-shadow:0 12px 26px rgba(37,211,102,.4);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5L8.9 7c-.2-.6-.5-.5-.7-.5H7.7c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3M12 0C5.4 0 .2 5.3.2 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.3-1.7c1.7.9 3.6 1.4 5.6 1.4 6.6 0 11.9-5.3 11.9-11.9C23.8 5.3 18.6 0 12 0z"/></svg>
+          Checkout via WhatsApp
+        </button>
+        <div style="text-align:center; font-size:11px; color:#8A7A64; margin-top:10px;">We'll confirm your order &amp; delivery on WhatsApp.</div>
+      </div>
+    </sc-if>
+  </aside>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  loadCart() {
+    try { return JSON.parse(localStorage.getItem('cc_cart') || '{}') || {}; } catch (e) { return {}; }
+  }
+  state = { cartItems: this.loadCart(), cartOpen: false, addedName: null, active: 0, menuOpen: false, isMobile: false, subscribed: false };
+
+  persist(items) {
+    try { localStorage.setItem('cc_cart', JSON.stringify(items)); } catch (e) {}
+  }
+
+  subscribe = (e) => { e.preventDefault(); this.setState({ subscribed: true }); };
+
+  SOCIAL = {
+    instagram: 'https://instagram.com/crunchandcrumbs',
+    facebook: 'https://facebook.com/crunchandcrumbs',
+    tiktok: 'https://tiktok.com/@crunchandcrumbs',
+  };
+  toggleSearch = () => this.setState(s => ({ searchOpen: !s.searchOpen }), () => {
+    if (this.state.searchOpen && this._searchInput) this._searchInput.focus();
+  });
+  setSearchRef = (el) => { this._searchInput = el; };
+  runSearch = (e) => {
+    e.preventDefault();
+    this.setState({ searchOpen: false });
+    const el = document.getElementById('products');
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 76, behavior: 'smooth' });
+  };
+  TCOUNT = 3;
+
+  componentDidMount() {
+    this.onResize = () => {
+      const m = window.innerWidth <= 640;
+      if (m !== this.state.isMobile) this.setState({ isMobile: m });
+    };
+    this.onResize();
+    window.addEventListener('resize', this.onResize);
+    this.timer = setInterval(() => {
+      this.setState(s => ({ active: (s.active + 1) % this.TCOUNT }));
+    }, 4500);
+  }
+  componentWillUnmount() {
+    clearInterval(this.timer);
+    window.removeEventListener('resize', this.onResize);
+  }
+
+  toggleMenu = () => this.setState(s => ({ menuOpen: !s.menuOpen }));
+  closeMenu = () => this.setState({ menuOpen: false });
+
+  go = (i) => {
+    clearInterval(this.timer);
+    this.setState({ active: ((i % this.TCOUNT) + this.TCOUNT) % this.TCOUNT });
+    this.timer = setInterval(() => {
+      this.setState(s => ({ active: (s.active + 1) % this.TCOUNT }));
+    }, 4500);
+  };
+  next = () => this.go(this.state.active + 1);
+  prev = () => this.go(this.state.active - 1);
+
+  WA = '27782890907';
+  waLink = (msg) => `https://wa.me/${this.WA}?text=${encodeURIComponent(msg)}`;
+
+  addItem = (item) => {
+    clearTimeout(this._addedT);
+    this.setState(s => {
+      const items = { ...s.cartItems };
+      const cur = items[item.name];
+      items[item.name] = { name: item.name, price: item.price, priceNum: item.priceNum, qty: (cur ? cur.qty : 0) + 1 };
+      this.persist(items);
+      return { cartItems: items, addedName: item.name };
+    });
+    this._addedT = setTimeout(() => this.setState({ addedName: null }), 1500);
+  };
+  changeQty = (name, delta) => this.setState(s => {
+    const items = { ...s.cartItems };
+    const cur = items[name]; if (!cur) return {};
+    const q = cur.qty + delta;
+    if (q <= 0) delete items[name]; else items[name] = { ...cur, qty: q };
+    this.persist(items);
+    return { cartItems: items };
+  });
+  removeItem = (name) => this.setState(s => { const items = { ...s.cartItems }; delete items[name]; this.persist(items); return { cartItems: items }; });
+  toggleCart = () => this.setState(s => ({ cartOpen: !s.cartOpen }));
+  closeCart = () => this.setState({ cartOpen: false });
+  checkout = () => {
+    const list = Object.values(this.state.cartItems);
+    if (!list.length) return;
+    let msg = 'Hi Crunch & Crumbs! I would like to place an order:\n';
+    let total = 0;
+    list.forEach(i => { const line = i.priceNum * i.qty; total += line; msg += `\n• ${i.qty} × ${i.name} — R${line.toFixed(2)}`; });
+    msg += `\n\nOrder total: R${total.toFixed(2)}\n\nPlease confirm availability and delivery details. Thank you!`;
+    window.open(this.waLink(msg), '_blank');
+  };
+
+  renderVals() {
+    const cartList = Object.values(this.state.cartItems);
+    const cartCount = cartList.reduce((a, i) => a + i.qty, 0);
+    const cartTotal = cartList.reduce((a, i) => a + i.priceNum * i.qty, 0);
+    return {
+      cart: cartCount,
+      cartCount,
+      cartBadgeDisplay: cartCount > 0 ? 'flex' : 'none',
+      cartFloatDisplay: cartCount > 0 ? 'flex' : 'none',
+      cartOverlayDisplay: this.state.cartOpen ? 'block' : 'none',
+      cartPanelTransform: this.state.cartOpen ? 'translateX(0)' : 'translateX(105%)',
+      cartHasItems: cartList.length > 0,
+      cartEmpty: cartList.length === 0,
+      cartLines: cartList.map(i => ({
+        name: i.name,
+        qty: i.qty,
+        unit: i.price,
+        lineTotal: 'R' + (i.priceNum * i.qty).toFixed(2),
+        inc: () => this.changeQty(i.name, 1),
+        dec: () => this.changeQty(i.name, -1),
+        remove: () => this.removeItem(i.name),
+      })),
+      cartTotal: 'R' + cartTotal.toFixed(2),
+      toggleCart: this.toggleCart,
+      closeCart: this.closeCart,
+      checkout: this.checkout,
+      waGeneral: this.waLink("Hi Crunch & Crumbs! I'd like to place an order. Please share your menu and prices."),
+      waCorporate: this.waLink("Hi Crunch & Crumbs! I'd like to enquire about a corporate / bulk order."),
+      social: this.SOCIAL,
+      instagram: this.SOCIAL.instagram,
+      facebook: this.SOCIAL.facebook,
+      tiktok: this.SOCIAL.tiktok,
+      toggleSearch: this.toggleSearch,
+      runSearch: this.runSearch,
+      setSearchRef: this.setSearchRef,
+      searchOpen: !!this.state.searchOpen,
+      searchDisplay: this.state.searchOpen ? 'flex' : 'none',
+      heroBadges: [
+        { title: 'Freshly Made', sub: 'In Small Batches', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M5 8c0-2 3-3 7-3s7 1 7 3-3 3-7 3-7-1-7-3zM5 8v8c0 2 3 3 7 3s7-1 7-3V8"/></svg>' },
+        { title: 'Premium', sub: 'Quality Ingredients', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.5 5 5.5.5-4 3.8 1.2 5.4L12 19.5 6.8 21.7 8 16.3l-4-3.8 5.5-.5z"/></svg>' },
+        { title: 'Hygienic', sub: '& Clean Production', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5z"/><path d="M9 12l2 2 4-4"/></svg>' },
+      ],
+      features: [
+        { title: 'Fast Delivery', sub: 'Quick & reliable delivery to you', icon: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="6" width="13" height="10" rx="1"/><path d="M14 9h4l3 3v4h-7z"/><circle cx="6" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg>' },
+        { title: 'Secure Packaging', sub: 'Keeps every bite fresh & crunchy', icon: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5z"/><path d="M9 12l2 2 4-4"/></svg>' },
+        { title: 'Perfect for Gifting', sub: 'Beautiful packs for every occasion', icon: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M3 12h18M12 8v13M12 8S9 3 6.5 4.5 8 8 12 8zM12 8s3-5 5.5-3.5S16 8 12 8z"/></svg>' },
+        { title: 'Made with Love', sub: 'Crafted with passion in every batch', icon: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21C7 17 3 13.5 3 9a4.5 4.5 0 0 1 9-1 4.5 4.5 0 0 1 9 1c0 4.5-4 8-9 12z"/></svg>' },
+      ].map(f => ({ ...f, icon: { __html: f.icon } })),
+      products: [
+        { name: 'Chocolate Chip Cookies', desc: 'Soft, chewy and loaded with chocolate chips.', price: 'R25.00', slot: 'cc-p1', img: 'assets/products/cookie-stack.jpg' },
+        { name: 'Classic Chinchin', desc: 'Crispy, golden and perfectly sweetened chinchin.', price: 'R20.00', slot: 'cc-p2', img: 'assets/products/bowl-chinchin.jpg' },
+        { name: 'Red Velvet Cookies', desc: 'Rich red velvet with white chocolate chips.', price: 'R30.00', slot: 'cc-p3', img: 'assets/products/cookie-single.jpg' },
+        { name: 'Coconut Chinchin', desc: 'Coconut infused chinchin with a delightful crunch.', price: 'R25.00', slot: 'cc-p4', img: 'assets/products/coconut-chinchin.jpg' },
+        { name: 'Mix Combo Pack', desc: 'A perfect mix of our cookies & chinchin favourites.', price: 'R40.00', slot: 'cc-p5', img: 'assets/products/mix-combo.png' },
+      ].map(p => {
+        const priceNum = parseFloat(String(p.price).replace(/[^0-9.]/g, '')) || 0;
+        const added = p.name === this.state.addedName;
+        return {
+          ...p, priceNum,
+          added,
+          addedLabel: added ? 'Added ✓' : 'ADD TO CART',
+          addedBg: added ? '#1F8A5B' : '#3A2416',
+          add: () => this.addItem({ name: p.name, price: p.price, priceNum }),
+        };
+      }),
+      storyValues: [
+        { title: 'Quality Ingredients', sub: 'We use only the best ingredients.', icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 13a8 8 0 0 0 16 0H4z"/><path d="M12 13V7M9 7c0-2 1.5-3 3-3s3 1 3 3"/></svg>' },
+        { title: 'Made with Love', sub: 'Every treat is baked with passion.', icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21C7 17 3 13.5 3 9a4.5 4.5 0 0 1 9-1 4.5 4.5 0 0 1 9 1c0 4.5-4 8-9 12z"/></svg>' },
+        { title: 'Trusted by Many', sub: 'Loved by customers across SA.', icon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="6"/><path d="M8.5 13.5L7 22l5-3 5 3-1.5-8.5"/></svg>' },
+      ].map(v => ({ ...v, icon: { __html: v.icon } })),
+      next: this.next,
+      prev: this.prev,
+      toggleMenu: this.toggleMenu,
+      closeMenu: this.closeMenu,
+      menuDisplay: this.state.menuOpen ? 'flex' : 'none',
+      subscribe: this.subscribe,
+      subscribed: this.state.subscribed,
+      notSubscribed: !this.state.subscribed,
+      mobileLinks: [
+        { label: 'Home', href: '#top' },
+        { label: 'Shop', href: '#products' },
+        { label: 'Gift Boxes', href: '#products' },
+        { label: 'Corporate Orders', href: this.waLink("Hi Crunch & Crumbs! I'd like to enquire about a corporate / bulk order.") },
+        { label: 'About Us', href: '#story' },
+        { label: 'Gallery', href: '#products' },
+        { label: 'Contact', href: '#contact' },
+      ],
+      trackTransform: this.state.isMobile
+        ? `translateX(calc(${-this.state.active} * (100% + 20px)))`
+        : 'translateX(0)',
+      testimonials: [
+        { text: 'The chinchin is absolutely addictive! So fresh and not greasy at all.', name: 'Temi A.', initial: 'T', avatarBg: 'radial-gradient(circle at 38% 34%, #E8BE6C, #C8912F 72%)' },
+        { text: 'The cookies are soft, delicious and perfect for gifting. Highly recommended!', name: 'Sizwe M.', initial: 'S', avatarBg: 'radial-gradient(circle at 38% 34%, #D8A65A, #A9741F 72%)' },
+        { text: 'Beautiful packaging and the taste is out of this world. My go-to snack!', name: 'Lerato K.', initial: 'L', avatarBg: 'radial-gradient(circle at 38% 34%, #E0C79A, #C29A5A 72%)' },
+      ].map((t, i) => {
+        const on = i === this.state.active;
+        const mob = this.state.isMobile;
+        return {
+          ...t,
+          scale: mob ? '1' : (on ? '1.045' : '0.95'),
+          opacity: mob || on ? '1' : '0.55',
+          border: on ? '#E0AF52' : 'rgba(58,36,22,0.06)',
+          shadow: on ? '0 20px 40px rgba(58,36,22,.18)' : '0 6px 16px rgba(58,36,22,.05)',
+        };
+      }),
+      dots: [0, 1, 2].map(i => ({
+        color: i === this.state.active ? '#C8912F' : 'rgba(58,36,22,.22)',
+        onClick: () => this.go(i),
+      })),
+    };
+  }
+}
+</script>
+</body>
+</html>
