@@ -114,5 +114,6 @@ select m.id, p.external_id, p.name, p.description, p.price, p.image from public.
   ('classic-chinchin','Classic Chinchin','Crispy, golden and perfectly sweetened.',20.00,'/assets/products/bowl-chinchin.jpg'),
   ('red-velvet','Red Velvet Cookies','Rich red velvet with white chocolate chips.',30.00,'/assets/products/cookie-single.jpg'),
   ('coconut-chinchin','Coconut Chinchin','Coconut-infused chinchin with a delightful crunch.',25.00,'/assets/products/coconut-chinchin.jpg'),
-  ('mix-combo','Mix Combo Pack','A gift-ready mix of cookies and chinchin favourites.',40.00,'/assets/products/mix-combo.png')
+  ('mix-combo','Mix Combo Pack','A gift-ready mix of cookies and chinchin favourites.',40.00,'/assets/products/mix-combo.png'),
+  ('gift-box','Celebration Gift Box','A beautifully packed selection made for sharing and gifting.',120.00,'/assets/products/gift-box.jpg')
 ) as p(external_id,name,description,price,image) where m.slug = 'crunch-and-crumbs' on conflict do nothing;

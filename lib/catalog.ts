@@ -8,4 +8,5 @@ export const products: Product[] = [
   { id: "red-velvet", merchantId: MERCHANT_ID, name: "Red Velvet Cookies", description: "Rich red velvet with white chocolate chips.", price: 30, image: "/assets/products/cookie-single.jpg", active: true },
   { id: "coconut-chinchin", merchantId: MERCHANT_ID, name: "Coconut Chinchin", description: "Coconut-infused chinchin with a delightful crunch.", price: 25, image: "/assets/products/coconut-chinchin.jpg", active: true },
   { id: "mix-combo", merchantId: MERCHANT_ID, name: "Mix Combo Pack", description: "A gift-ready mix of cookies and chinchin favourites.", price: 40, image: "/assets/products/mix-combo.png", active: true },
+  { id: "gift-box", merchantId: MERCHANT_ID, name: "Celebration Gift Box", description: "A beautifully packed selection made for sharing and gifting.", price: 120, image: "/assets/products/gift-box.jpg", active: true },
 ];
