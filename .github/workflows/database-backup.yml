@@ -19,7 +19,7 @@ jobs:
           sudo apt-get install --yes postgresql-common
           sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
           sudo apt-get install --yes postgresql-client-17
-          pg_dump --version
+          /usr/lib/postgresql/17/bin/pg_dump --version
 
       - name: Create logical backup
         env:
@@ -27,9 +27,9 @@ jobs:
         run: |
           test -n "$DATABASE_URL"
           mkdir -p backup
-          pg_dump "$DATABASE_URL" --format=custom --no-owner --no-acl --file backup/database.dump
-          pg_dump "$DATABASE_URL" --schema=public --schema-only --no-owner --no-acl --file backup/public-schema.sql
-          pg_restore --list backup/database.dump > backup/restore-manifest.txt
+          /usr/lib/postgresql/17/bin/pg_dump "$DATABASE_URL" --format=custom --no-owner --no-acl --file backup/database.dump
+          /usr/lib/postgresql/17/bin/pg_dump "$DATABASE_URL" --schema=public --schema-only --no-owner --no-acl --file backup/public-schema.sql
+          /usr/lib/postgresql/17/bin/pg_restore --list backup/database.dump > backup/restore-manifest.txt
           test -s backup/database.dump
           test -s backup/restore-manifest.txt
           sha256sum backup/database.dump backup/public-schema.sql > backup/SHA256SUMS
