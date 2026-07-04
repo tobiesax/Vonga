@@ -294,3 +294,32 @@ footer{display:block;padding:0}.footerBottom span{float:none}
 @keyframes vongaSealSpin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.vonga .disc svg{animation:none}}
 @media(max-width:900px){.vonga .disc{display:none}}
+
+/* Mobile layout hardening */
+.vonga{width:100%;max-width:100%;overflow-x:hidden}
+@media(max-width:600px){
+  html,body{max-width:100%;overflow-x:hidden}
+  .vonga .v-top{height:34px;padding:0 12px;justify-content:center;font-size:8px;white-space:nowrap}
+  .vonga .v-header{width:100%;padding-inline:20px}
+  .vonga .v-header nav.open{max-height:calc(100vh - 110px);overflow:auto;box-shadow:0 20px 35px rgba(0,0,0,.14)}
+  .vonga .v-hero{height:630px;min-height:0}
+  .vonga .hero-copy{top:105px;left:28px;right:25%;width:auto}
+  .vonga .hero-copy h1{font-size:56px;line-height:.83}
+  .vonga .hero-copy>span{font-size:12px;line-height:1.65;max-width:175px}
+  .vonga .hero-buttons{width:184px;gap:10px}.vonga .hero-buttons a{padding:14px 10px}
+  .vonga .arrivals{padding:48px 20px 55px;display:block}
+  .vonga .arrival-intro{display:grid;grid-template-columns:1fr auto;align-items:end;margin-bottom:24px}.vonga .arrival-intro>p,.vonga .arrival-intro h2{grid-column:1}.vonga .arrival-intro h2{font-size:43px;margin-bottom:0}.vonga .arrival-intro>a{grid-column:2;grid-row:1/3}.vonga .arrival-filter{display:none}
+  .vonga .product-row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:13px;padding:0 0 12px;scrollbar-width:none}.vonga .product-row::-webkit-scrollbar{display:none}.vonga .product-row article{flex:0 0 74vw;scroll-snap-align:start}.vonga .product-photo{height:430px}.vonga .product-row h3{font-size:13px}.vonga .product-row p,.vonga .product-row b{font-size:12px}
+  .vonga .philosophy{width:100%;min-height:250px;height:auto;padding:38px 24px;gap:17px;align-items:flex-start}.vonga .philosophy>strong{font-size:39px;letter-spacing:.21em;max-width:100%}.vonga .philosophy>i{width:64px;height:1px}.vonga .philosophy>div{width:100%}.vonga .philosophy blockquote{font-size:21px;line-height:1.25;max-width:100%;white-space:normal}.vonga .philosophy blockquote br{display:none}.vonga .philosophy span{display:block;margin-top:13px}
+  .vonga .collections{padding:18px 16px 30px;gap:30px}.vonga .collections article{padding:0}.vonga .collections>article>img,.vonga .occasion-carousel,.vonga .womenswear-carousel{height:70vh;min-height:480px;max-height:610px}.vonga .collections h3{font-size:12px;margin-top:13px}.vonga .collections p{font-size:12px}
+  .vonga .experience{display:block;padding:42px 22px}.vonga .experience-title{padding:0 0 26px}.vonga .experience-title h2{font-size:36px}.vonga .experience article{height:auto;min-height:92px;border-left:0;border-top:1px solid var(--v-line);display:grid;grid-template-columns:45px 1fr;text-align:left;align-content:center;align-items:center;padding:17px 4px}.vonga .experience article svg{grid-row:1/3;margin:0}.vonga .experience article b{font-size:10px}.vonga .experience article p{font-size:11px;margin:4px 0;max-width:none}
+  .vonga .appointment{height:235px;padding:30px 22px;background-position:center}.vonga .appointment h2{font-size:30px}
+  .vonga .brand-story>div{padding:52px 22px}.vonga .brand-story h2{font-size:35px;line-height:1.02;overflow-wrap:break-word}.vonga .brand-story>div>p:not(:first-child){font-size:13px;line-height:1.7}.vonga .story-points span{font-size:9px}.vonga .brand-story>img{min-height:380px;max-height:520px}
+  .vonga .lookbook{padding:34px 0 28px 20px;gap:14px}.vonga .lookbook-copy{padding-right:20px}.vonga .lookbook h2{font-size:35px}.vonga .look-controls{right:20px}.vonga .look-strip{height:410px;padding-right:20px}.vonga .look-card{flex-basis:76vw;min-width:76vw}
+  .vonga .credibility{padding:55px 20px}.vonga .credibility h2{font-size:35px}.vonga .credibility article{padding:20px 8px}
+  .vonga footer{padding-bottom:82px}.vonga .footer-links{grid-template-columns:1fr 1fr;gap:28px}.vonga .copyright span{float:none;display:block;margin:8px 0 0}
+  .v-modal-layer{padding:0;align-items:end}.product-modal{width:100%;max-height:96vh}.product-modal-image{min-height:43vh;max-height:48vh}.product-modal-copy{padding:28px 20px}.product-modal-copy h2{font-size:36px}.product-description{margin:15px 0}.product-modal-copy fieldset{margin:17px 0}
+  .bag-drawer{width:100%;padding:42px 20px 100px}.payment-options label{padding:10px}
+  .vonga .whatsapp-concierge{bottom:72px}.vonga .mobile-actions{left:0;right:0;bottom:0}.vonga .mobile-actions button{min-height:52px}
+}
+@media(max-width:370px){.vonga .hero-copy{left:20px}.vonga .hero-copy h1{font-size:50px}.vonga .product-row article{flex-basis:82vw}.vonga .product-photo{height:405px}.vonga .v-logo{font-size:19px}.vonga .footer-links{grid-template-columns:1fr}}
