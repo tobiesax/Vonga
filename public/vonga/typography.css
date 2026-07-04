@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root{
+ --font-display:"Cormorant Garamond",serif;
+ --font-body:"Inter",sans-serif;
+ --tracking-logo:0.45em;
+ --tracking-nav:0.18em;
+ --tracking-button:0.12em;
+}

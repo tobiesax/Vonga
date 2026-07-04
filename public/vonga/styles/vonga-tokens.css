@@ -1,0 +1,14 @@
+:root {
+  --vonga-black: #111111;
+  --vonga-ivory: #F7F1E8;
+  --vonga-cream: #EFE2CB;
+  --vonga-champagne: #D8B982;
+  --vonga-gold: #B79245;
+  --vonga-brown: #6E4B2E;
+  --vonga-border: rgba(17,17,17,.12);
+  --vonga-radius: 0px;
+  --vonga-serif: "Didot", "Bodoni 72", "Playfair Display", Georgia, serif;
+  --vonga-sans: "Inter", Arial, sans-serif;
+  --space-section: clamp(64px, 8vw, 128px);
+  --container: 1440px;
+}

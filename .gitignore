@@ -10,3 +10,6 @@ uploads/
 .vercel
 supabase/.temp/
 backups/
+tools/
+tmp/
+dev-server.log
