@@ -295,6 +295,9 @@ footer{display:block;padding:0}.footerBottom span{float:none}
 @media(prefers-reduced-motion:reduce){.vonga .disc svg{animation:none}}
 @media(max-width:900px){.vonga .disc{display:none}}
 
+/* Mobile hero crop: keep the editorial copy left and reveal the model at right. */
+@media(max-width:600px){.vonga .hero-model{background-size:100% 100%,auto 94%;background-repeat:no-repeat;background-position:center,55% center}}
+
 /* Mobile layout hardening */
 .vonga{width:100%;max-width:100%;overflow-x:hidden}
 @media(max-width:600px){
