@@ -2,4 +2,4 @@ export function isSupabaseConfigured() {
   return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY && process.env.SUPABASE_SERVICE_ROLE_KEY);
 }
 
-export const merchantSlug = () => process.env.NEXT_PUBLIC_MERCHANT_SLUG || "crunch-and-crumbs";
+export const merchantSlug = () => process.env.NEXT_PUBLIC_MERCHANT_SLUG || "vonga";

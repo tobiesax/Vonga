@@ -2,16 +2,16 @@ import type { Order, OrderStatus } from "./types";
 
 export function orderConfirmation(order: Order) {
   const lines = order.items.map((item) => `${item.quantity} × ${item.name}`).join("\n");
-  return `Hi ${order.customerName}! We received order ${order.id}.\n\n${lines}\n\nTotal: R${order.total.toFixed(2)}\n\nReply here if you need any help.`;
+  return `Hi ${order.customerName}! We received your Vonga order ${order.id}.\n\n${lines}\n\nTotal: R${order.total.toFixed(2)}\n\nOur atelier will contact you within one business day to confirm delivery and your chosen payment method.`;
 }
 
 export function statusMessage(name: string, orderId: string, status: OrderStatus) {
   const messages: Partial<Record<OrderStatus, string>> = {
     payment_pending: `Hi ${name}! Order ${orderId} is awaiting payment. Reply here if you need payment details.`,
-    confirmed: `Great news, ${name}! Payment for order ${orderId} is confirmed. We’ll begin preparing your treats.`,
-    preparing: `Your Crunch & Crumbs order ${orderId} is now being prepared with love.`,
+    confirmed: `Great news, ${name}! Payment for order ${orderId} is confirmed. Our atelier will begin preparing your pieces.`,
+    preparing: `Your Vonga order ${orderId} is now being prepared by our atelier.`,
     ready: `Order ${orderId} is ready! We’ll contact you now with collection or delivery details.`,
-    delivered: `Order ${orderId} has been delivered. Thank you, ${name}! We’d love to hear how you enjoyed it.`,
+    delivered: `Order ${orderId} has been delivered. Thank you, ${name}! We’d love to hear how you wore it.`,
   };
   return messages[status] ?? `Order ${orderId} is now ${status.replaceAll("_", " ")}.`;
 }

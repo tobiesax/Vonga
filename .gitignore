@@ -13,3 +13,6 @@ backups/
 tools/
 tmp/
 dev-server.log
+local-dev.out.log
+local-dev.err.log
+data/vonga-orders.json

@@ -5,7 +5,7 @@ import { orderConfirmation, sendWhatsApp, statusMessage } from "./whatsapp";
 import { isSupabaseConfigured, merchantSlug } from "./supabase/config";
 import { createSupabaseAdminClient, createSupabaseServerClient } from "./supabase/server";
 
-export type CheckoutInput = { name: string; phone: string; address: string; notes: string; items: OrderItem[] };
+export type CheckoutInput = { name: string; phone: string; email: string; address: string; notes: string; paymentMethod: string; items: OrderItem[] };
 
 const money = (value: unknown) => Number(value ?? 0);
 
@@ -40,8 +40,8 @@ export async function getDashboardData(): Promise<StoreData> {
   if (failure) throw new Error(failure.message);
   return {
     products: (productResult.data ?? []).map((row) => ({ id: row.external_id, merchantId: id, name: row.name, description: row.description, price: money(row.price), image: row.image, active: row.active })),
-    customers: (customerResult.data ?? []).map((row) => ({ id: row.id, merchantId: row.merchant_id, name: row.name, phone: row.phone, address: row.address, orderCount: row.order_count, totalSpent: money(row.total_spent), createdAt: row.created_at })),
-    orders: (orderResult.data ?? []).map((row) => ({ id: row.id, merchantId: row.merchant_id, customerId: row.customer_id, customerName: row.customer_name, phone: row.phone, address: row.address, notes: row.notes, items: (itemResult.data ?? []).filter((item) => item.order_id === row.id).map((item) => ({ productId: item.product_external_id, name: item.name, price: money(item.price), quantity: item.quantity })), subtotal: money(row.subtotal), deliveryFee: money(row.delivery_fee), total: money(row.total), status: row.status as OrderStatus, createdAt: row.created_at })),
+    customers: (customerResult.data ?? []).map((row) => ({ id: row.id, merchantId: row.merchant_id, name: row.name, phone: row.phone, email: row.email ?? "", address: row.address, orderCount: row.order_count, totalSpent: money(row.total_spent), createdAt: row.created_at })),
+    orders: (orderResult.data ?? []).map((row) => ({ id: row.id, merchantId: row.merchant_id, customerId: row.customer_id, customerName: row.customer_name, phone: row.phone, email: row.email ?? "", address: row.address, notes: row.notes, paymentMethod: row.payment_method ?? "", items: (itemResult.data ?? []).filter((item) => item.order_id === row.id).map((item) => ({ productId: item.product_external_id, name: item.name, size: item.size ?? "", price: money(item.price), quantity: item.quantity })), subtotal: money(row.subtotal), deliveryFee: money(row.delivery_fee), total: money(row.total), status: row.status as OrderStatus, createdAt: row.created_at })),
     events: (eventResult.data ?? []).map((row) => ({ id: row.id, merchantId: row.merchant_id, type: row.type, orderId: row.order_id, status: row.status, message: row.message, createdAt: row.created_at })),
   };
 }
@@ -55,19 +55,20 @@ export async function createCheckoutOrder(input: CheckoutInput): Promise<Order> 
   if (productError || !rows || rows.length !== new Set(productIds).size) throw new Error("One of the selected products is unavailable.");
   const items = input.items.map((item) => {
     const product = rows.find((row) => row.external_id === item.productId)!;
-    return { databaseId: product.id as string, productId: product.external_id as string, name: product.name as string, price: money(product.price), quantity: Math.max(1, Math.min(20, Number(item.quantity) || 1)) };
+    return { databaseId: product.id as string, productId: product.external_id as string, name: product.name as string, size: item.size, price: money(product.price), quantity: Math.max(1, Math.min(5, Number(item.quantity) || 1)) };
   });
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const deliveryFee = subtotal >= 200 ? 0 : 35;
+  const deliveryFee = subtotal >= 1500 ? 0 : 120;
   const phone = input.phone.replace(/[^+\d]/g, "");
+  const email = input.email.trim();
   const { data: existing } = await admin.from("customers").select("id,order_count,total_spent").eq("merchant_id", id).eq("phone", phone).maybeSingle();
-  const customerValues = { merchant_id: id, name: input.name.trim(), phone, address: input.address.trim(), order_count: (existing?.order_count ?? 0) + 1, total_spent: money(existing?.total_spent) + subtotal + deliveryFee, updated_at: new Date().toISOString() };
+  const customerValues = { merchant_id: id, name: input.name.trim(), phone, email, address: input.address.trim(), order_count: (existing?.order_count ?? 0) + 1, total_spent: money(existing?.total_spent) + subtotal + deliveryFee, updated_at: new Date().toISOString() };
   const { data: customer, error: customerError } = await admin.from("customers").upsert(customerValues, { onConflict: "merchant_id,phone" }).select("id").single();
   if (customerError || !customer) throw new Error(customerError?.message ?? "Customer could not be saved.");
-  const order: Order = { id: `CC-${Date.now().toString().slice(-6)}`, merchantId: id, customerId: customer.id, customerName: input.name.trim(), phone, address: input.address.trim(), notes: input.notes.trim(), items: items.map(({ productId, name, price, quantity }) => ({ productId, name, price, quantity })), subtotal, deliveryFee, total: subtotal + deliveryFee, status: "new", createdAt: new Date().toISOString() };
-  const { error: orderError } = await admin.from("orders").insert({ id: order.id, merchant_id: id, customer_id: customer.id, customer_name: order.customerName, phone, address: order.address, notes: order.notes, subtotal, delivery_fee: deliveryFee, total: order.total, status: order.status, created_at: order.createdAt });
+  const order: Order = { id: `VO-${Date.now().toString().slice(-6)}`, merchantId: id, customerId: customer.id, customerName: input.name.trim(), phone, email, address: input.address.trim(), notes: input.notes.trim(), paymentMethod: input.paymentMethod, items: items.map(({ productId, name, size, price, quantity }) => ({ productId, name, size, price, quantity })), subtotal, deliveryFee, total: subtotal + deliveryFee, status: "new", createdAt: new Date().toISOString() };
+  const { error: orderError } = await admin.from("orders").insert({ id: order.id, merchant_id: id, customer_id: customer.id, customer_name: order.customerName, phone, email, address: order.address, notes: order.notes, payment_method: order.paymentMethod, subtotal, delivery_fee: deliveryFee, total: order.total, status: order.status, created_at: order.createdAt });
   if (orderError) throw new Error(orderError.message);
-  const { error: itemError } = await admin.from("order_items").insert(items.map((item) => ({ order_id: order.id, merchant_id: id, product_id: item.databaseId, product_external_id: item.productId, name: item.name, price: item.price, quantity: item.quantity })));
+  const { error: itemError } = await admin.from("order_items").insert(items.map((item) => ({ order_id: order.id, merchant_id: id, product_id: item.databaseId, product_external_id: item.productId, name: item.name, size: item.size, price: item.price, quantity: item.quantity })));
   if (itemError) throw new Error(itemError.message);
   await recordConfirmation(admin, order);
   return order;
@@ -86,15 +87,16 @@ async function createLocalOrder(input: CheckoutInput) {
     const items = input.items.map((item) => {
       const product = data.products.find((candidate) => candidate.id === item.productId && candidate.active);
       if (!product) throw new Error("One of the selected products is unavailable.");
-      return { productId: product.id, name: product.name, price: product.price, quantity: Math.max(1, Math.min(20, Number(item.quantity) || 1)) };
+      return { productId: product.id, name: product.name, size: item.size, price: product.price, quantity: Math.max(1, Math.min(5, Number(item.quantity) || 1)) };
     });
     const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const phone = input.phone.replace(/[^+\d]/g, "");
+    const email = input.email.trim();
     let customer = data.customers.find((entry) => entry.merchantId === MERCHANT_ID && entry.phone === phone);
-    if (!customer) { customer = { id: crypto.randomUUID(), merchantId: MERCHANT_ID, name: input.name.trim(), phone, address: input.address.trim(), orderCount: 0, totalSpent: 0, createdAt: new Date().toISOString() }; data.customers.push(customer); }
-    const deliveryFee = subtotal >= 200 ? 0 : 35;
-    const order: Order = { id: `CC-${Date.now().toString().slice(-6)}`, merchantId: MERCHANT_ID, customerId: customer.id, customerName: input.name.trim(), phone, address: input.address.trim(), notes: input.notes.trim(), items, subtotal, deliveryFee, total: subtotal + deliveryFee, status: "new", createdAt: new Date().toISOString() };
-    customer.name = order.customerName; customer.address = order.address; customer.orderCount += 1; customer.totalSpent += order.total; data.orders.unshift(order);
+    if (!customer) { customer = { id: crypto.randomUUID(), merchantId: MERCHANT_ID, name: input.name.trim(), phone, email, address: input.address.trim(), orderCount: 0, totalSpent: 0, createdAt: new Date().toISOString() }; data.customers.push(customer); }
+    const deliveryFee = subtotal >= 1500 ? 0 : 120;
+    const order: Order = { id: `VO-${Date.now().toString().slice(-6)}`, merchantId: MERCHANT_ID, customerId: customer.id, customerName: input.name.trim(), phone, email, address: input.address.trim(), notes: input.notes.trim(), paymentMethod: input.paymentMethod, items, subtotal, deliveryFee, total: subtotal + deliveryFee, status: "new", createdAt: new Date().toISOString() };
+    customer.name = order.customerName; customer.email = email; customer.address = order.address; customer.orderCount += 1; customer.totalSpent += order.total; data.orders.unshift(order);
     const message = orderConfirmation(order); let status: "queued" | "sent" | "failed" = "queued";
     try { status = (await sendWhatsApp(phone, message)).status; } catch { status = "failed"; }
     data.events.unshift({ id: crypto.randomUUID(), merchantId: MERCHANT_ID, type: "order_confirmation", orderId: order.id, status, message, createdAt: new Date().toISOString() });
