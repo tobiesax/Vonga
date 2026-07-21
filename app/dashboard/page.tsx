@@ -1,2 +1,10 @@
 import { redirect } from "next/navigation";
-export default function LegacyDashboard() { redirect("/"); }
+import { isAuthenticated } from "@/lib/auth";
+import { getDashboardData } from "@/lib/repository";
+import Dashboard from "./view";
+
+export default async function DashboardPage() {
+  if (!(await isAuthenticated())) redirect("/login");
+  const data = await getDashboardData();
+  return <Dashboard initial={data} />;
+}
