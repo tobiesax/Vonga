@@ -26,7 +26,7 @@ footer{display:block;padding:0}.footerBottom span{float:none}
 
 /* Local Vonga imagery: project-owned and safe from remote loading failures. */
 .vonga .hero-model{inset:0}
-.vonga .appointment{background-image:linear-gradient(90deg,rgba(12,10,10,.88),rgba(12,10,10,.2)),url('/vonga/images/editorial/tailoring-tools.png')}
+.vonga .appointment{background-image:linear-gradient(90deg,rgba(12,10,10,.88),rgba(12,10,10,.2)),url('/vonga/images/editorial/tailoring-tools.webp')}
 .vonga .look-strip img{image-rendering:auto}
 
 /* Supplied Vonga background pack */
@@ -99,8 +99,8 @@ footer{display:block;padding:0}.footerBottom span{float:none}
 .vonga .hero-track{position:absolute;inset:0}
 .vonga .hero-slide{position:absolute;inset:0;opacity:0;background-repeat:no-repeat;transition:opacity 1.1s ease}
 .vonga .hero-slide.active{opacity:1}
-.vonga .hero-slide-mermaid{background-image:url('/vonga/images/hero/hero-model-mermaid-red-cutout.png'),radial-gradient(46% 58% at 68% 56%,rgba(122,32,42,.15),transparent 72%);background-size:auto 96%,100% 100%;background-position:70% bottom,center}
-.vonga .hero-slide-navysuit{background-image:url('/vonga/images/hero/hero-model-navy-pinstripe-suit-cutout.png'),radial-gradient(46% 58% at 68% 56%,rgba(20,24,42,.18),transparent 72%);background-size:auto 96%,100% 100%;background-position:70% bottom,center}
+.vonga .hero-slide-mermaid{background-image:url('/vonga/images/hero/hero-model-mermaid-red-cutout.webp'),radial-gradient(46% 58% at 68% 56%,rgba(122,32,42,.15),transparent 72%);background-size:auto 96%,100% 100%;background-position:70% bottom,center}
+.vonga .hero-slide-navysuit{background-image:url('/vonga/images/hero/hero-model-navy-pinstripe-suit-cutout.webp'),radial-gradient(46% 58% at 68% 56%,rgba(20,24,42,.18),transparent 72%);background-size:auto 96%,100% 100%;background-position:70% bottom,center}
 .vonga .hero-fade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#f9f3e8 0%,#f9f3e8 43%,rgba(249,243,232,.78) 52%,rgba(249,243,232,.2) 63%,transparent 72%)}
 .vonga .hero-dots{position:absolute;z-index:3;left:15.3%;bottom:36px;display:flex;gap:9px}
 .vonga .hero-dots button{width:8px;height:8px;padding:0;border-radius:50%;border:1px solid rgba(45,34,22,.4);background:transparent;cursor:pointer;transition:.25s ease}
