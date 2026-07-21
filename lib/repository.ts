@@ -1,7 +1,7 @@
 import { MERCHANT_ID, products as localProducts } from "./catalog";
 import { readStore, updateStore } from "./store";
 import type { Order, OrderItem, OrderStatus, Product, StoreData } from "./types";
-import { orderConfirmation, sendWhatsApp, statusMessage } from "./whatsapp";
+import { orderConfirmation, orderConfirmationTemplateParams, sendWhatsApp, sendWhatsAppTemplate, statusMessage } from "./whatsapp";
 import { isSupabaseConfigured, merchantSlug } from "./supabase/config";
 import { createSupabaseAdminClient, createSupabaseServerClient } from "./supabase/server";
 
@@ -77,7 +77,7 @@ export async function createCheckoutOrder(input: CheckoutInput): Promise<Order> 
 async function recordConfirmation(admin: ReturnType<typeof createSupabaseAdminClient>, order: Order) {
   const message = orderConfirmation(order);
   let status: "queued" | "sent" | "failed" = "queued";
-  try { status = (await sendWhatsApp(order.phone, message)).status; } catch { status = "failed"; }
+  try { status = (await sendWhatsAppTemplate(order.phone, "order_confirmation", orderConfirmationTemplateParams(order))).status; } catch { status = "failed"; }
   const { error } = await admin.from("automation_events").insert({ merchant_id: order.merchantId, type: "order_confirmation", order_id: order.id, status, message });
   if (error) throw new Error(error.message);
 }

@@ -16,7 +16,12 @@ export function statusMessage(name: string, orderId: string, status: OrderStatus
   return messages[status] ?? `Order ${orderId} is now ${status.replaceAll("_", " ")}.`;
 }
 
-export async function sendWhatsApp(to: string, message: string) {
+export function orderConfirmationTemplateParams(order: Order) {
+  const items = order.items.map((item) => `${item.quantity} × ${item.name}`).join(", ");
+  return [order.customerName, order.id, items, order.total.toFixed(2)];
+}
+
+async function postWhatsApp(body: Record<string, unknown>) {
   const token = process.env.WHATSAPP_ACCESS_TOKEN;
   const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
   if (!token || !phoneNumberId) return { status: "queued" as const, providerId: null };
@@ -24,9 +29,22 @@ export async function sendWhatsApp(to: string, message: string) {
   const response = await fetch(`https://graph.facebook.com/v21.0/${phoneNumberId}/messages`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ messaging_product: "whatsapp", to: to.replace(/\D/g, ""), type: "text", text: { body: message } }),
+    body: JSON.stringify(body),
   });
   if (!response.ok) throw new Error(`WhatsApp API returned ${response.status}`);
-  const body = await response.json() as { messages?: { id: string }[] };
-  return { status: "sent" as const, providerId: body.messages?.[0]?.id ?? null };
+  const responseBody = await response.json() as { messages?: { id: string }[] };
+  return { status: "sent" as const, providerId: responseBody.messages?.[0]?.id ?? null };
+}
+
+export async function sendWhatsApp(to: string, message: string) {
+  return postWhatsApp({ messaging_product: "whatsapp", to: to.replace(/\D/g, ""), type: "text", text: { body: message } });
+}
+
+export async function sendWhatsAppTemplate(to: string, templateName: string, params: string[], languageCode = "en_US") {
+  return postWhatsApp({
+    messaging_product: "whatsapp",
+    to: to.replace(/\D/g, ""),
+    type: "template",
+    template: { name: templateName, language: { code: languageCode }, components: [{ type: "body", parameters: params.map((text) => ({ type: "text", text })) }] },
+  });
 }
