@@ -16,6 +16,11 @@ export function statusMessage(name: string, orderId: string, status: OrderStatus
   return messages[status] ?? `Order ${orderId} is now ${status.replaceAll("_", " ")}.`;
 }
 
+export function merchantOrderAlert(order: Order) {
+  const lines = order.items.map((item) => `${item.quantity} × ${item.name}`).join(", ");
+  return `New Vonga order ${order.id} from ${order.customerName} (${order.phone}).\n\nItems: ${lines}\nTotal: R${order.total.toFixed(2)}\n\nCheck the dashboard for full details.`;
+}
+
 export function orderConfirmationTemplateParams(order: Order) {
   const items = order.items.map((item) => `${item.quantity} × ${item.name}`).join(", ");
   return [order.customerName, order.id, items, order.total.toFixed(2)];
@@ -40,7 +45,7 @@ export async function sendWhatsApp(to: string, message: string) {
   return postWhatsApp({ messaging_product: "whatsapp", to: to.replace(/\D/g, ""), type: "text", text: { body: message } });
 }
 
-export async function sendWhatsAppTemplate(to: string, templateName: string, params: string[], languageCode = "en_US") {
+export async function sendWhatsAppTemplate(to: string, templateName: string, params: string[], languageCode = "en") {
   return postWhatsApp({
     messaging_product: "whatsapp",
     to: to.replace(/\D/g, ""),

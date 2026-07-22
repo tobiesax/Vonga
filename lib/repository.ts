@@ -1,8 +1,9 @@
 import { MERCHANT_ID, products as localProducts } from "./catalog";
 import { readStore, updateStore } from "./store";
 import type { Order, OrderItem, OrderStatus, Product, StoreData } from "./types";
-import { orderConfirmation, orderConfirmationTemplateParams, sendWhatsApp, sendWhatsAppTemplate, statusMessage } from "./whatsapp";
+import { merchantOrderAlert, orderConfirmation, orderConfirmationTemplateParams, sendWhatsApp, sendWhatsAppTemplate, statusMessage } from "./whatsapp";
 import { isSupabaseConfigured, merchantSlug } from "./supabase/config";
+import { BUSINESS_PHONE } from "./site";
 import { createSupabaseAdminClient, createSupabaseServerClient } from "./supabase/server";
 
 export type CheckoutInput = { name: string; phone: string; email: string; address: string; notes: string; paymentMethod: string; items: OrderItem[] };
@@ -58,7 +59,7 @@ export async function createCheckoutOrder(input: CheckoutInput): Promise<Order> 
     return { databaseId: product.id as string, productId: product.external_id as string, name: product.name as string, size: item.size, price: money(product.price), quantity: Math.max(1, Math.min(5, Number(item.quantity) || 1)) };
   });
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const deliveryFee = subtotal >= 1500 ? 0 : 120;
+  const deliveryFee = subtotal >= 5000 ? 0 : 120;
   const phone = input.phone.replace(/[^+\d]/g, "");
   const email = input.email.trim();
   const { data: existing } = await admin.from("customers").select("id,order_count,total_spent").eq("merchant_id", id).eq("phone", phone).maybeSingle();
@@ -80,6 +81,12 @@ async function recordConfirmation(admin: ReturnType<typeof createSupabaseAdminCl
   try { status = (await sendWhatsAppTemplate(order.phone, "order_confirmation", orderConfirmationTemplateParams(order))).status; } catch { status = "failed"; }
   const { error } = await admin.from("automation_events").insert({ merchant_id: order.merchantId, type: "order_confirmation", order_id: order.id, status, message });
   if (error) throw new Error(error.message);
+
+  const alertMessage = merchantOrderAlert(order);
+  let alertStatus: "queued" | "sent" | "failed" = "queued";
+  try { alertStatus = (await sendWhatsApp(BUSINESS_PHONE, alertMessage)).status; } catch { alertStatus = "failed"; }
+  const { error: alertError } = await admin.from("automation_events").insert({ merchant_id: order.merchantId, type: "merchant_order_alert", order_id: order.id, status: alertStatus, message: alertMessage });
+  if (alertError) throw new Error(alertError.message);
 }
 
 async function createLocalOrder(input: CheckoutInput) {
@@ -94,7 +101,7 @@ async function createLocalOrder(input: CheckoutInput) {
     const email = input.email.trim();
     let customer = data.customers.find((entry) => entry.merchantId === MERCHANT_ID && entry.phone === phone);
     if (!customer) { customer = { id: crypto.randomUUID(), merchantId: MERCHANT_ID, name: input.name.trim(), phone, email, address: input.address.trim(), orderCount: 0, totalSpent: 0, createdAt: new Date().toISOString() }; data.customers.push(customer); }
-    const deliveryFee = subtotal >= 1500 ? 0 : 120;
+    const deliveryFee = subtotal >= 5000 ? 0 : 120;
     const order: Order = { id: `VO-${Date.now().toString().slice(-6)}`, merchantId: MERCHANT_ID, customerId: customer.id, customerName: input.name.trim(), phone, email, address: input.address.trim(), notes: input.notes.trim(), paymentMethod: input.paymentMethod, items, subtotal, deliveryFee, total: subtotal + deliveryFee, status: "new", createdAt: new Date().toISOString() };
     customer.name = order.customerName; customer.email = email; customer.address = order.address; customer.orderCount += 1; customer.totalSpent += order.total; data.orders.unshift(order);
     const message = orderConfirmation(order); let status: "queued" | "sent" | "failed" = "queued";
@@ -102,6 +109,29 @@ async function createLocalOrder(input: CheckoutInput) {
     data.events.unshift({ id: crypto.randomUUID(), merchantId: MERCHANT_ID, type: "order_confirmation", orderId: order.id, status, message, createdAt: new Date().toISOString() });
     return order;
   });
+}
+
+export async function subscribeToNewsletter(email: string) {
+  const value = email.trim().toLowerCase();
+  if (!isSupabaseConfigured()) return;
+  const admin = createSupabaseAdminClient();
+  const id = await merchantId();
+  const { error } = await admin.from("newsletter_subscribers").upsert({ merchant_id: id, email: value }, { onConflict: "merchant_id,email" });
+  if (error) throw new Error(error.message);
+}
+
+export async function findCustomerByPhone(phone: string) {
+  const value = phone.replace(/[^+\d]/g, "");
+  if (!value) return null;
+  if (!isSupabaseConfigured()) {
+    const data = await readStore();
+    const found = data.customers.find((entry) => entry.merchantId === MERCHANT_ID && entry.phone === value);
+    return found ? { name: found.name, email: found.email, address: found.address } : null;
+  }
+  const admin = createSupabaseAdminClient();
+  const id = await merchantId();
+  const { data } = await admin.from("customers").select("name,email,address").eq("merchant_id", id).eq("phone", value).maybeSingle();
+  return data ? { name: data.name as string, email: (data.email as string) ?? "", address: data.address as string } : null;
 }
 
 export async function updateOrderStatus(id: string, status: OrderStatus) {
