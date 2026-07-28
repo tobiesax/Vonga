@@ -144,33 +144,10 @@ footer{display:block;padding:0}.footerBottom span{float:none}
 @keyframes vongaSilkDrift{0%{background-position:center,44% 46%}50%{background-position:center,52% 54%}100%{background-position:center,47% 50%}}
 @media(prefers-reduced-motion:reduce){.vonga .philosophy{animation:none;background-position:center}}
 
-/* Occasion-wear three-look carousel */
-.vonga .occasion-carousel{position:relative;height:235px;overflow:hidden;background:#292523;box-shadow:0 10px 24px rgba(45,31,16,.08)}
-.vonga .collections .occasion-carousel>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 12%;opacity:0;animation:vongaOccasionFade 16s ease-in-out infinite;box-shadow:none}
-.vonga .collections .occasion-carousel>img:nth-child(1){animation-delay:0s}
-.vonga .collections .occasion-carousel>img:nth-child(2){animation-delay:4s}
-.vonga .collections .occasion-carousel>img:nth-child(3){animation-delay:8s;object-position:center 8%}
-.vonga .collections .occasion-carousel>img:nth-child(4){animation-delay:12s}
-.vonga .occasion-dots{position:absolute;z-index:3;right:13px;bottom:12px;display:flex;gap:6px}
-.vonga .occasion-dots i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:0 0 0 1px rgba(0,0,0,.08)}
-@keyframes vongaOccasionFade{0%{opacity:0;transform:scale(1.025)}4.5%,22.5%{opacity:1;transform:scale(1)}27%,100%{opacity:0;transform:scale(1.012)}}
-@media(prefers-reduced-motion:reduce){.vonga .collections .occasion-carousel>img{animation:none;opacity:0}.vonga .collections .occasion-carousel>img:first-child{opacity:1}}
-@media(max-width:900px){.vonga .occasion-carousel{height:330px}}
-
-/* Taller collection gallery and five-look womenswear carousel. */
-.vonga .collections{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
-.vonga .collections>article>img,.vonga .collections>article>video,.vonga .occasion-carousel,.vonga .womenswear-carousel{height:470px}
+/* Bespoke collection feature card */
+.vonga .collections{grid-template-columns:1fr;gap:22px}
+.vonga .collections>article>img,.vonga .collections>article>video{height:470px}
 .vonga .collections video{width:100%;object-fit:cover;box-shadow:0 10px 24px rgba(45,31,16,.08);display:block;background:#000}
-.vonga .womenswear-carousel{position:relative;overflow:hidden;background:#e9e6e2;box-shadow:0 10px 24px rgba(45,31,16,.08)}
-.vonga .collections .womenswear-carousel>img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;opacity:0;animation:vongaWomenswearFade 20s ease-in-out infinite;box-shadow:none;background:#e9e6e2}
-.vonga .collections .womenswear-carousel>img:nth-child(1){animation-delay:0s}
-.vonga .collections .womenswear-carousel>img:nth-child(2){animation-delay:4s}
-.vonga .collections .womenswear-carousel>img:nth-child(3){animation-delay:8s}
-.vonga .collections .womenswear-carousel>img:nth-child(4){animation-delay:12s}
-.vonga .collections .womenswear-carousel>img:nth-child(5){animation-delay:16s}
-.vonga .collections .occasion-carousel>img{object-fit:contain;background:#deddda}
-.vonga .womenswear-dots{position:absolute;z-index:3;right:13px;bottom:12px;display:flex;gap:6px}
-.vonga .womenswear-dots i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.68);box-shadow:0 0 0 1px rgba(0,0,0,.13)}
 .vonga .photo-nav{position:absolute;z-index:4;top:50%;transform:translateY(-50%);width:30px;height:30px;padding:0;border:0;border-radius:50%;background:rgba(20,17,13,.55);color:#fff;font-size:17px;line-height:1;display:grid;place-items:center;cursor:pointer;transition:background .2s}
 .vonga .photo-nav:hover{background:rgba(20,17,13,.8)}
 .vonga .photo-nav-prev{left:8px}
@@ -179,9 +156,7 @@ footer{display:block;padding:0}.footerBottom span{float:none}
 .vonga .product-modal-image .photo-nav{width:38px;height:38px;font-size:21px}
 .vonga .product-modal-image .photo-nav-prev{left:16px}
 .vonga .product-modal-image .photo-nav-next{right:16px}
-@keyframes vongaWomenswearFade{0%{opacity:0;transform:scale(1.012)}4%,18%{opacity:1;transform:scale(1)}22%,100%{opacity:0;transform:scale(1.006)}}
-@media(prefers-reduced-motion:reduce){.vonga .collections .womenswear-carousel>img{animation:none;opacity:0}.vonga .collections .womenswear-carousel>img:first-child{opacity:1}}
-@media(max-width:900px){.vonga .collections{grid-template-columns:1fr}.vonga .collections>article>img,.vonga .collections>article>video,.vonga .occasion-carousel,.vonga .womenswear-carousel{height:min(650px,82vh)}}
+@media(max-width:900px){.vonga .collections>article>img,.vonga .collections>article>video{height:min(650px,82vh)}}
 
 /* Higher-contrast hero accents and header bag treatment. */
 .vonga .hero-copy>p{color:#7a4b0d;font-weight:600}
@@ -252,18 +227,8 @@ footer{display:block;padding:0}.footerBottom span{float:none}
 .brand-story{display:grid;grid-template-columns:1fr 1fr;background:#f6f1e9}.brand-story>div{padding:80px 9vw 80px 7vw;align-self:center}.brand-story>div>p:first-child,.credibility>p{color:#865511;text-transform:uppercase;font-size:10px;font-weight:600;letter-spacing:.17em}.brand-story h2,.credibility h2{font:500 47px/1.05 'Cormorant Garamond',serif;margin:12px 0 23px}.brand-story>div>p:not(:first-child){font-size:14px;line-height:1.8;color:#574d43;max-width:600px}.brand-story>img,.brand-story .atelier-carousel{width:100%;height:100%;min-height:560px;object-fit:cover}.brand-story .atelier-carousel{position:relative;overflow:hidden}.brand-story .atelier-carousel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;animation:vongaAtelierFade 8s ease-in-out infinite}.brand-story .atelier-carousel img:nth-child(2){animation-delay:4s}.story-points{display:grid;gap:10px;margin:27px 0}.story-points span{display:flex;gap:12px;align-items:center;font-size:11px;text-transform:uppercase;letter-spacing:.07em}.story-points b{color:#865511;font:500 19px 'Cormorant Garamond',serif}.brand-story button{border:1px solid #302418;background:transparent;padding:14px 24px;text-transform:uppercase;font-size:9px;font-weight:600;letter-spacing:.1em;cursor:pointer}.credibility{text-align:center;padding:75px 7vw;background:#f6f1e9}.credibility h2{margin-top:8px}.credibility>div{display:grid;grid-template-columns:repeat(3,1fr);max-width:1050px;margin:35px auto 0}.credibility article{display:grid;gap:9px;padding:8px 35px;border-right:1px solid #d8cdbf}.credibility article:last-child{border:0}.credibility b{font:500 21px 'Cormorant Garamond',serif}.credibility span{font-size:11px;line-height:1.6;color:#685e53}.mobile-actions{display:none}
 @media(max-width:800px){.product-modal{grid-template-columns:1fr;max-height:95vh}.product-modal-image{min-height:auto;max-height:60vh;display:flex;align-items:center;justify-content:center}.product-modal-image img{width:100%;height:auto;max-height:60vh;object-fit:contain}.product-modal-copy{padding:35px 24px}.product-modal-copy h2,.bag-drawer h2{font-size:38px}.bag-drawer{padding:42px 22px}.brand-story{grid-template-columns:1fr}.brand-story>div{padding:58px 24px}.brand-story h2,.credibility h2{font-size:39px}.brand-story>img,.brand-story .atelier-carousel{min-height:400px}.credibility>div{grid-template-columns:1fr}.credibility article{border-right:0;border-bottom:1px solid #d8cdbf;padding:20px}.mobile-actions{position:fixed;z-index:70;left:12px;right:12px;bottom:10px;display:grid;grid-template-columns:1fr 1fr;box-shadow:0 12px 40px rgba(0,0,0,.28)}.mobile-actions button{border:0;padding:14px;background:#865511;color:#fff;text-transform:uppercase;font-size:9px;font-weight:600;letter-spacing:.08em}.mobile-actions button:last-child{background:#1d1813;display:flex;justify-content:center;align-items:center;gap:7px}.mobile-actions svg{width:17px}.vonga footer{padding-bottom:60px}.vonga .product-photo .product-add{opacity:1;transform:none}}
 
-/* Shoppable category carousel cards */
-.vonga .womenswear-carousel .carousel-product,.vonga .occasion-carousel .carousel-product{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;background:#e7e3de;cursor:pointer;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .5s ease;overflow:hidden}
-.vonga .womenswear-carousel .carousel-product.active,.vonga .occasion-carousel .carousel-product.active{opacity:1;visibility:visible;pointer-events:auto}
-.vonga .carousel-product img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
-.vonga .carousel-product>span{position:absolute;left:14px;right:14px;bottom:14px;padding:12px;background:rgba(20,17,13,.88);color:#fff;text-transform:uppercase;font-size:9px;letter-spacing:.12em;transform:translateY(8px);opacity:0;transition:.25s ease}
-.vonga .carousel-product:hover>span,.vonga .carousel-product:focus-visible>span{transform:none;opacity:1}
-@media(max-width:800px){.vonga .carousel-product>span{opacity:1;transform:none}}
-
-/* Commerce contrast and carousel interaction correction. */
+/* Commerce contrast correction. */
 .vonga .modal-add,.vonga .drawer-checkout,.vonga .checkout-form>button{color:#fff}
-.vonga .carousel-product>span{opacity:1;transform:none;color:#fff}
-@media(max-width:560px){.vonga .womenswear-carousel,.vonga .occasion-carousel{display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}.vonga .womenswear-carousel::-webkit-scrollbar,.vonga .occasion-carousel::-webkit-scrollbar{display:none}.vonga .womenswear-carousel .carousel-product,.vonga .occasion-carousel .carousel-product{position:relative;flex:0 0 100%;width:100%;height:100%;opacity:1!important;visibility:visible!important;pointer-events:auto!important;scroll-snap-align:center}.vonga .womenswear-dots,.vonga .occasion-dots{display:none}}
 
 /* Floating conversion aids */
 .vonga .floating-bag-summary{position:fixed;z-index:82;right:24px;bottom:92px;min-width:285px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;border:1px solid rgba(255,255,255,.12);background:#1b1712;color:#fff;padding:12px 15px;box-shadow:0 18px 45px rgba(16,11,6,.3);cursor:pointer;animation:vongaFloatIn .25s ease-out}
@@ -320,7 +285,7 @@ footer{display:block;padding:0}.footerBottom span{float:none}
   .vonga .arrival-intro{display:grid;grid-template-columns:1fr auto;align-items:end;margin-bottom:24px}.vonga .arrival-intro>p,.vonga .arrival-intro h2{grid-column:1}.vonga .arrival-intro h2{font-size:43px;margin-bottom:0}.vonga .arrival-intro>a{grid-column:2;grid-row:1/3}.vonga .arrival-filter{display:none}
   .vonga .product-row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:13px;padding:0 0 12px;scrollbar-width:none}.vonga .product-row::-webkit-scrollbar{display:none}.vonga .product-row article{flex:0 0 74vw;scroll-snap-align:start}.vonga .product-photo{height:430px}.vonga .product-row h3{font-size:13px}.vonga .product-row p,.vonga .product-row b{font-size:12px}
   .vonga .philosophy{width:100%;min-height:250px;height:auto;padding:38px 24px;gap:17px;align-items:flex-start}.vonga .philosophy>strong{font-size:39px;letter-spacing:.21em;max-width:100%}.vonga .philosophy>i{width:64px;height:1px}.vonga .philosophy>div{width:100%}.vonga .philosophy blockquote{font-size:21px;line-height:1.25;max-width:100%;white-space:normal}.vonga .philosophy blockquote br{display:none}.vonga .philosophy span{display:block;margin-top:13px}
-  .vonga .collections{padding:18px 16px 30px;gap:30px}.vonga .collections article{padding:0}.vonga .collections>article>img,.vonga .collections>article>video,.vonga .occasion-carousel,.vonga .womenswear-carousel{height:70vh;min-height:480px;max-height:610px}.vonga .collections h3{font-size:12px;margin-top:13px}.vonga .collections p{font-size:12px}
+  .vonga .collections{padding:18px 16px 30px;gap:30px}.vonga .collections article{padding:0}.vonga .collections>article>img,.vonga .collections>article>video{height:70vh;min-height:480px;max-height:610px}.vonga .collections h3{font-size:12px;margin-top:13px}.vonga .collections p{font-size:12px}
   .vonga .experience{display:block;padding:42px 22px}.vonga .experience-title{padding:0 0 26px}.vonga .experience-title h2{font-size:36px}.vonga .experience article{height:auto;min-height:92px;border-left:0;border-top:1px solid var(--v-line);display:grid;grid-template-columns:45px 1fr;text-align:left;align-content:center;align-items:center;padding:17px 4px}.vonga .experience article svg{grid-row:1/3;margin:0}.vonga .experience article b{font-size:10px}.vonga .experience article p{font-size:11px;margin:4px 0;max-width:none}
   .vonga .appointment{height:235px;padding:30px 22px;background-position:center}.vonga .appointment h2{font-size:30px}
   .vonga .brand-story>div{padding:52px 22px}.vonga .brand-story h2{font-size:35px;line-height:1.02;overflow-wrap:break-word}.vonga .brand-story>div>p:not(:first-child){font-size:13px;line-height:1.7}.vonga .story-points span{font-size:9px}.vonga .brand-story>img,.brand-story .atelier-carousel{min-height:380px;max-height:520px}
