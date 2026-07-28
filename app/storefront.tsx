@@ -9,8 +9,8 @@ const heroSlides = [
   { key: "mermaid", alt: "Vonga scarlet leaf mermaid gown in noir satin" },
   { key: "navysuit", alt: "Vonga navy pinstripe double-breasted trouser suit" },
 ];
-const womenswearIds = ["crimson-ruffle-mermaid-gown","golden-jacquard-blouse-set","ivory-plunge-bubble-mini","orange-pink-colourblock-midi-dress","scarlet-beaded-velvet-ballgown","golden-sweetheart-ballgown"];
-const occasionIds = ["sage-petal-shoulder-mermaid-gown","caramel-drape-pocket-mini-dress","tangerine-cape-sleeve-jumpsuit"];
+const womenswearIds = ["golden-jacquard-blouse-set","ivory-plunge-bubble-mini","orange-pink-colourblock-midi-dress","scarlet-beaded-velvet-ballgown","golden-sweetheart-ballgown","tangerine-cape-sleeve-jumpsuit"];
+const occasionIds = ["crimson-ruffle-mermaid-gown","sage-petal-shoulder-mermaid-gown","caramel-drape-pocket-mini-dress"];
 
 function Icon({ name }: { name: string }) {
   const p = { width: 24, height: 24, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.35, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };
