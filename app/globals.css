@@ -315,3 +315,13 @@ footer{display:block;padding:0}.footerBottom span{float:none}
 .vonga .mobile-header-tools{position:absolute;z-index:50;right:16px;top:15px;display:flex;align-items:center;gap:5px}.vonga .mobile-header-tools button{width:38px;height:38px;border:0;background:transparent;display:grid;place-items:center;padding:0;position:relative}.vonga .mobile-bag svg{width:22px;height:22px}.vonga .mobile-bag b{position:absolute;right:-1px;top:-1px;min-width:17px;height:17px;padding:0 4px;border-radius:10px;display:grid;place-items:center;background:#865511;color:#fff;font-size:8px}.vonga .mobile-menu i{display:block;width:22px;height:1px;background:#1c1813;margin:3px auto}
 @media(min-width:601px){.vonga .mobile-header-tools{display:none}}
 @media(max-width:600px){.vonga .v-menu,.vonga .v-tools{display:none!important}.vonga .mobile-header-tools{position:absolute;z-index:5;right:16px;top:15px;display:flex;align-items:center;gap:5px}.vonga .mobile-header-tools button{width:38px;height:38px;border:0;background:transparent;display:grid;place-items:center;padding:0;position:relative}.vonga .mobile-bag svg{width:22px;height:22px}.vonga .mobile-bag b{position:absolute;right:-1px;top:-1px;min-width:17px;height:17px;padding:0 4px;border-radius:10px;display:grid;place-items:center;background:#865511;color:#fff;font-size:8px}.vonga .mobile-menu i{display:block;width:22px;height:1px;background:#1c1813;margin:3px auto}.vonga .v-header nav.open{display:flex;top:76px}}
+
+/* Tablet fix (601-900px): .arrivals collapses to a single explicit
+   column here, but .arrival-controls' grid-column:2 forces a phantom
+   implicit second column, which hijacks auto-placement of the sidebar
+   copy and the product row onto the same row instead of stacking. */
+@media(min-width:601px) and (max-width:900px){
+  .vonga .arrivals{display:flex;flex-direction:column;gap:20px}
+  .vonga .arrival-intro{padding:0}
+  .vonga .arrival-controls{grid-column:auto;margin-top:6px}
+}
