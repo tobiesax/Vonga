@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { vongaProducts } from "@/lib/vonga";
 import { BUSINESS_ADDRESS, BUSINESS_PHONE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+import AnalyticsScripts from "./analytics-scripts";
+import CookieConsentBanner from "./cookie-consent";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -63,5 +65,5 @@ function StructuredData() {
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><head><StructuredData /></head><body>{children}</body></html>;
+  return <html lang="en"><head><StructuredData /></head><body>{children}<AnalyticsScripts /><CookieConsentBanner /></body></html>;
 }

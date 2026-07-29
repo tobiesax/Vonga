@@ -1,6 +1,7 @@
 "use client";
 
 import { formatRand, type VongaProduct, vongaProducts, vongaCategoryStyles } from "@/lib/vonga";
+import { trackAddToCart, trackPurchase, trackViewContent } from "@/lib/analytics";
 import { useEffect, useRef, useState } from "react";
 
 type BasketLine = { productId: string; size: string; quantity: number };
@@ -60,6 +61,7 @@ export default function Storefront() {
   useEffect(() => { localStorage.setItem("vonga-bag", JSON.stringify(basket)); }, [basket]);
   useEffect(() => { localStorage.setItem("vonga-wishlist", JSON.stringify(wishlist)); }, [wishlist]);
   useEffect(() => { if (!notice) return; const timer = setTimeout(() => setNotice(""), 3200); return () => clearTimeout(timer); }, [notice]);
+  useEffect(() => { if (selected) trackViewContent(selected); }, [selected]);
   useEffect(() => { const update = () => setShowMobileActions(window.scrollY > Math.min(680, window.innerHeight * .78)); update(); addEventListener("scroll", update, { passive: true }); return () => removeEventListener("scroll", update); }, []);
   const modalOpen = appointmentOpen || !!selected || bagOpen || searchOpen || wishlistOpen || checkoutOpen;
   useEffect(() => { document.body.style.overflow = modalOpen ? "hidden" : ""; const close = (event: KeyboardEvent) => { if (event.key === "Escape") { setAppointmentOpen(false); setSelected(null); setBagOpen(false); setSearchOpen(false); setWishlistOpen(false); setCheckoutOpen(false); setConfirmedOrder(null); } }; addEventListener("keydown", close); return () => { document.body.style.overflow = ""; removeEventListener("keydown", close); }; }, [modalOpen]);
@@ -70,7 +72,7 @@ export default function Storefront() {
   const filtered = vongaProducts.filter((p) => `${p.name} ${p.category} ${p.description}`.toLowerCase().includes(query.toLowerCase()));
   const wishProducts = vongaProducts.filter((p) => wishlist.includes(p.id));
   const closePanels = () => { setBagOpen(false); setSearchOpen(false); setWishlistOpen(false); setCheckoutOpen(false); setConfirmedOrder(null); };
-  const add = (product: VongaProduct, size: string) => { if (!size) { setSelected(product); setSelectedSize(""); setNotice("Choose your size to continue"); return; } setBasket((current) => { const found = current.find((line) => line.productId === product.id && line.size === size); return found ? current.map((line) => line === found ? { ...line, quantity: Math.min(5, line.quantity + 1) } : line) : [...current, { productId: product.id, size, quantity: 1 }]; }); setSelected(null); setSelectedSize(""); setNotice(`${product.name} added to your bag`); setBagOpen(true); };
+  const add = (product: VongaProduct, size: string) => { if (!size) { setSelected(product); setSelectedSize(""); setNotice("Choose your size to continue"); return; } setBasket((current) => { const found = current.find((line) => line.productId === product.id && line.size === size); return found ? current.map((line) => line === found ? { ...line, quantity: Math.min(5, line.quantity + 1) } : line) : [...current, { productId: product.id, size, quantity: 1 }]; }); trackAddToCart(product, size); setSelected(null); setSelectedSize(""); setNotice(`${product.name} added to your bag`); setBagOpen(true); };
   const changeQuantity = (target: BasketLine, amount: number) => setBasket((current) => current.flatMap((line) => line.productId === target.productId && line.size === target.size ? (line.quantity + amount > 0 ? [{ ...line, quantity: Math.min(5, line.quantity + amount) }] : []) : [line]));
   const removeLine = (target: BasketLine) => setBasket((current) => current.filter((line) => !(line.productId === target.productId && line.size === target.size)));
   const toggleWishlist = (id: string) => setWishlist((current) => current.includes(id) ? current.filter((entry) => entry !== id) : [...current, id]);
@@ -81,7 +83,7 @@ export default function Storefront() {
   useEffect(() => { const timer = setInterval(() => setHeroIndex((current) => (current + 1) % heroSlides.length), 4000); return () => clearInterval(timer); }, []);
 
   async function submitAppointment(event: React.FormEvent<HTMLFormElement>) { event.preventDefault(); setBusy(true); const form = new FormData(event.currentTarget); const response = await fetch("/api/vonga/appointments", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.fromEntries(form)) }); const data = await response.json(); setBusy(false); if (!response.ok) return setNotice(data.error || "Appointment request failed"); setAppointmentOpen(false); setNotice(`Request ${data.appointment.id} received — our atelier will contact you`); }
-  async function submitOrder(event: React.FormEvent<HTMLFormElement>) { event.preventDefault(); setBusy(true); const form = new FormData(event.currentTarget); const payload = { ...Object.fromEntries(form), items: basket }; const response = await fetch("/api/vonga/orders", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); const data = await response.json(); setBusy(false); if (!response.ok) return setNotice(data.error || "Order request failed"); setBasket([]); setCheckoutOpen(false); setCheckoutName(""); setCheckoutPhone(""); setCheckoutEmail(""); setCheckoutAddress(""); setConfirmedOrder({ id: data.order.id, total: data.order.total, email: data.order.email }); }
+  async function submitOrder(event: React.FormEvent<HTMLFormElement>) { event.preventDefault(); setBusy(true); const form = new FormData(event.currentTarget); const payload = { ...Object.fromEntries(form), items: basket }; const response = await fetch("/api/vonga/orders", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); const data = await response.json(); setBusy(false); if (!response.ok) return setNotice(data.error || "Order request failed"); setBasket([]); setCheckoutOpen(false); setCheckoutName(""); setCheckoutPhone(""); setCheckoutEmail(""); setCheckoutAddress(""); setConfirmedOrder({ id: data.order.id, total: data.order.total, email: data.order.email }); trackPurchase(data.order.id, data.order.total); }
   async function submitNewsletter(event: React.FormEvent<HTMLFormElement>) { event.preventDefault(); setNewsletterStatus("loading"); const response = await fetch("/api/vonga/newsletter", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: newsletterEmail }) }); setNewsletterStatus(response.ok ? "done" : "error"); setNotice(response.ok ? "Welcome to the Vonga private list" : "Something went wrong, please try again"); if (response.ok) setNewsletterEmail(""); }
   function handleCheckoutPhone(value: string) {
     setCheckoutPhone(value);
