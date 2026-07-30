@@ -118,7 +118,7 @@ footer{display:block;padding:0}.footerBottom span{float:none}
 .vonga .hero-copy h1 em{color:#a97824}
 .vonga .mini-rule{width:68px;background:#a97824}
 .vonga .hero-buttons a:first-child{background:#ad7c29;border-color:#ad7c29}
-@media(max-width:900px){.vonga .hero-slide-mermaid{background-position:96% bottom}.vonga .hero-slide-navysuit{background-position:96% bottom}.vonga .hero-dots{left:8%}}
+@media(max-width:900px){.vonga .hero-slide-mermaid{background-position:110% bottom}.vonga .hero-slide-navysuit{background-position:110% bottom}.vonga .hero-dots{left:8%}}
 @media(max-width:560px){.vonga .hero-copy{left:6%}.vonga .hero-copy>span{max-width:190px}.vonga .hero-slide{background-size:auto 88%!important}.vonga .hero-slide-mermaid{background-position:8% bottom}.vonga .hero-slide-navysuit{background-position:8% bottom}.vonga .hero-fade{background:linear-gradient(180deg,rgba(249,243,232,.92) 0%,rgba(249,243,232,.5) 15%,rgba(249,243,232,.04) 28%,transparent 34%)}}
 
 /* Five-look looping editorial carousel */
