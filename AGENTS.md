@@ -12,6 +12,8 @@ already been established. Read this before making changes.
   **not** shared with any other business — the codebase originated from a bakery template
   ("Crunch & Crumbs") but Vonga now runs on its own fully separate Supabase project.
 - **Meta WhatsApp Cloud API** — order confirmations and merchant alerts.
+- **Twilio** — SMS merchant alerts (no Vercel Marketplace integration exists for SMS/Twilio,
+  so this is a direct API integration, same pattern as WhatsApp).
 - **Mailchimp** — newsletter signups sync here for campaign sending (composing/sending
   campaigns happens in Mailchimp's own dashboard, not in this codebase).
 
@@ -27,8 +29,8 @@ already been established. Read this before making changes.
   reformatting the whole file.
 - `lib/repository.ts` — checkout/order logic, Supabase reads/writes, dashboard data. Has a
   local-JSON fallback path (`isSupabaseConfigured()` false) that's dev-only, not the real path.
-- `lib/whatsapp.ts` / `lib/mailchimp.ts` / `lib/site.ts` — integration helpers and shared
-  business constants (phone, address, site URL).
+- `lib/whatsapp.ts` / `lib/sms.ts` / `lib/mailchimp.ts` / `lib/site.ts` — integration helpers
+  and shared business constants (phone, address, site URL).
 
 ## Product photo conventions
 
@@ -62,11 +64,18 @@ already been established. Read this before making changes.
 ## Checkout flow
 
 `createCheckoutOrder()` in `lib/repository.ts`: upserts the customer by phone (dedup key),
-creates the order + order_items, then `recordConfirmation()` fires two WhatsApp sends — the
-customer's order-confirmation template, and a freeform alert to the merchant's own number
-(`BUSINESS_PHONE` in `lib/site.ts`). The checkout form also does phone-based customer lookup
-(`/api/vonga/customers/lookup`) to auto-fill name/email/address for returning customers —
-no login wall, just recognition by phone number.
+creates the order + order_items, then `recordConfirmation()` fires: the customer's WhatsApp
+order-confirmation template, a freeform WhatsApp alert to the merchant, and an SMS alert to
+the merchant — both merchant alerts go to `ORDER_ALERT_PHONE` in `lib/site.ts` (a private
+number, separate from the public `BUSINESS_PHONE` WhatsApp line). The merchant alert message
+(`merchantOrderAlert()` in `lib/whatsapp.ts`) includes the delivery address and a link to the
+order's dashboard card (`{SITE_URL}/dashboard#{orderId}`). The checkout form also does
+phone-based customer lookup (`/api/vonga/customers/lookup`) to auto-fill name/email/address
+for returning customers — no login wall, just recognition by phone number.
+
+`ORDER_ALERT_PHONE` (+27 63 318 8924) is not yet registered as a WhatsApp recipient in Meta's
+console, so the WhatsApp half of the merchant alert may not deliver there until that's done —
+SMS via Twilio is the reliable channel for this number in the meantime.
 
 ## Merchant dashboard
 
@@ -79,9 +88,10 @@ here). Current login email is `info@vonga.co.za`; the password is **not** record
 
 Required keys: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
 `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_MERCHANT_SLUG` (=`vonga`), `DASHBOARD_PASSWORD`,
-`AUTH_SECRET`, `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `MAILCHIMP_API_KEY`,
-`MAILCHIMP_AUDIENCE_ID`. If working in a fresh environment (not this same machine), these need
-to be recreated manually — ask the project owner, don't regenerate/rotate them without asking.
+`AUTH_SECRET`, `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `TWILIO_ACCOUNT_SID`,
+`TWILIO_AUTH_TOKEN`, `TWILIO_PHONE_NUMBER`, `MAILCHIMP_API_KEY`, `MAILCHIMP_AUDIENCE_ID`. If
+working in a fresh environment (not this same machine), these need to be recreated manually —
+ask the project owner, don't regenerate/rotate them without asking.
 
 ## Business facts (for structured data / copy consistency)
 

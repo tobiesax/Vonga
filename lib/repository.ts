@@ -2,8 +2,9 @@ import { MERCHANT_ID, products as localProducts } from "./catalog";
 import { readStore, updateStore } from "./store";
 import type { Order, OrderItem, OrderStatus, Product, StoreData } from "./types";
 import { merchantOrderAlert, orderConfirmation, orderConfirmationTemplateParams, sendWhatsApp, sendWhatsAppTemplate, statusMessage } from "./whatsapp";
+import { sendSms } from "./sms";
 import { isSupabaseConfigured, merchantSlug } from "./supabase/config";
-import { BUSINESS_PHONE } from "./site";
+import { ORDER_ALERT_PHONE } from "./site";
 import { createSupabaseAdminClient, createSupabaseServerClient } from "./supabase/server";
 
 export type CheckoutInput = { name: string; phone: string; email: string; address: string; notes: string; paymentMethod: string; items: OrderItem[] };
@@ -84,9 +85,14 @@ async function recordConfirmation(admin: ReturnType<typeof createSupabaseAdminCl
 
   const alertMessage = merchantOrderAlert(order);
   let alertStatus: "queued" | "sent" | "failed" = "queued";
-  try { alertStatus = (await sendWhatsApp(BUSINESS_PHONE, alertMessage)).status; } catch { alertStatus = "failed"; }
+  try { alertStatus = (await sendWhatsApp(ORDER_ALERT_PHONE, alertMessage)).status; } catch { alertStatus = "failed"; }
   const { error: alertError } = await admin.from("automation_events").insert({ merchant_id: order.merchantId, type: "merchant_order_alert", order_id: order.id, status: alertStatus, message: alertMessage });
   if (alertError) throw new Error(alertError.message);
+
+  let smsStatus: "queued" | "sent" | "failed" = "queued";
+  try { smsStatus = (await sendSms(ORDER_ALERT_PHONE, alertMessage)).status; } catch { smsStatus = "failed"; }
+  const { error: smsError } = await admin.from("automation_events").insert({ merchant_id: order.merchantId, type: "merchant_order_alert_sms", order_id: order.id, status: smsStatus, message: alertMessage });
+  if (smsError) throw new Error(smsError.message);
 }
 
 async function createLocalOrder(input: CheckoutInput) {

@@ -3,3 +3,5 @@ export const SITE_NAME = "Vonga";
 export const SITE_DESCRIPTION = "Bespoke, made-to-measure fashion from the Vonga atelier in Pretoria. Ready-to-wear couture, tailoring and occasion wear, delivered nationwide.";
 export const BUSINESS_PHONE = "+27762468320";
 export const BUSINESS_ADDRESS = { street: "Menlyn Square Office Park, 134 Aramist Ave", locality: "Menlyn, Pretoria", region: "Gauteng", country: "ZA" };
+// Private line for new-order alerts (SMS + WhatsApp once registered with Meta) — not the public WhatsApp business line above.
+export const ORDER_ALERT_PHONE = "+27633188924";

@@ -1,4 +1,5 @@
 import type { Order, OrderStatus } from "./types";
+import { SITE_URL } from "./site";
 
 export function orderConfirmation(order: Order) {
   const lines = order.items.map((item) => `${item.quantity} × ${item.name}`).join("\n");
@@ -18,7 +19,7 @@ export function statusMessage(name: string, orderId: string, status: OrderStatus
 
 export function merchantOrderAlert(order: Order) {
   const lines = order.items.map((item) => `${item.quantity} × ${item.name}`).join(", ");
-  return `New Vonga order ${order.id} from ${order.customerName} (${order.phone}).\n\nItems: ${lines}\nTotal: R${order.total.toFixed(2)}\n\nCheck the dashboard for full details.`;
+  return `New Vonga order ${order.id} from ${order.customerName} (${order.phone}).\n\nItems: ${lines}\nTotal: R${order.total.toFixed(2)}\nDeliver to: ${order.address}\n\nView order: ${SITE_URL}/dashboard#${order.id}`;
 }
 
 export function orderConfirmationTemplateParams(order: Order) {
