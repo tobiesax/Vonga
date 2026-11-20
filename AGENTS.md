@@ -11,7 +11,10 @@ already been established. Read this before making changes.
 - **Supabase** (Postgres + Auth) — dedicated project, ref `lcwyqwmaakqygkemmuks`. This is
   **not** shared with any other business — the codebase originated from a bakery template
   ("Crunch & Crumbs") but Vonga now runs on its own fully separate Supabase project.
-- **Meta WhatsApp Cloud API** — order confirmations and merchant alerts.
+- **Resend** — transactional email for order confirmations, merchant alerts and order-status
+  updates, sent through a durable outbox (see "Email automation" below). The WhatsApp `wa.me`
+  link in the storefront footer is a manual concierge chat only — no Meta API, templates or
+  business verification are used anywhere in this codebase anymore.
 - **Mailchimp** — newsletter signups sync here for campaign sending (composing/sending
   campaigns happens in Mailchimp's own dashboard, not in this codebase).
 
@@ -45,36 +48,57 @@ already been established. Read this before making changes.
   timestamped name. **Always view the file before processing it** — filenames are not reliable,
   and stale/wrong files can linger from earlier in a session.
 
-## WhatsApp — known gotchas
+## Email automation — durable outbox
 
-- The approved order-confirmation template is named `order_confirmation` with language code
-  **`en`** — NOT `en_US`. Meta rejects the send with a confusing "template does not exist"
-  error if you use the wrong code. This broke real customer confirmations silently until fixed.
-- `WHATSAPP_ACCESS_TOKEN` must be a **permanent System User token** (Business Settings → System
-  Users), not the 24-hour temporary token Meta shows during initial test setup.
-- Freeform text messages (used for order status updates: payment_pending, confirmed, etc.) only
-  deliver within a 24-hour window the *customer* opens by messaging first. This is a known
-  follow-up — those status messages are not yet converted to templates the way order
-  confirmation was.
-- New WhatsApp phone numbers sometimes need an explicit `/register` API call (with a PIN) before
-  they can send at all — if you see error 133010 "Account not registered," that's why.
+Order confirmations, merchant alerts and status-change emails replaced the old Meta WhatsApp
+automation (migrated 20 November 2026, see `Vonga_Email_Automation_Handoff.md` if still around).
+No Meta business verification, WhatsApp templates or WhatsApp API credentials are needed for
+notifications anymore — only the `wa.me` concierge link remains, and it's just a static link.
+
+- `lib/email.ts` — thin Resend HTTPS wrapper (`RESEND_API_KEY`, `ORDER_EMAIL_FROM`,
+  `ORDER_EMAIL_REPLY_TO`). Returns a `retryable` flag so the caller can tell a transient failure
+  (network/5xx/429 — worth retrying) from a permanent one (missing config, invalid recipient —
+  not worth retrying).
+- `lib/email-templates.ts` — subject/HTML/text builders for the three email kinds. All dynamic
+  values are HTML-escaped (customer notes are free text). Currency uses
+  `Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR' })`; dates use
+  `Africa/Johannesburg`.
+- `lib/notifications.ts` — claims due rows from the `notification_jobs` table (migration
+  `004_notification_outbox.sql`) via the `claim_notification_jobs` RPC (uses `FOR UPDATE SKIP
+  LOCKED` + a lease so two workers can't double-send), sends the email, and on failure
+  reschedules with exponential backoff + jitter up to 8 attempts before marking the job
+  `failed`. Every outcome also writes an `automation_events` row so the dashboard's existing
+  "Automation log" panel keeps working unchanged.
+- `app/api/jobs/process-notifications/route.ts` — the worker endpoint, authorized by a
+  `NOTIFICATION_WORKER_SECRET` bearer token. `.github/workflows/process-notifications.yml` calls
+  it every 5 minutes (repo secrets `NOTIFICATION_WORKER_URL` + `NOTIFICATION_WORKER_SECRET` —
+  GitHub Actions cron was used instead of Vercel Cron because this repo already has that pattern
+  in `database-backup.yml`, and Vercel's Hobby-tier cron only runs daily).
+- Jobs are also drained inline (best-effort, `void processDueNotificationJobs(...).catch(...)`)
+  right after an order is created or its status changes, so customers usually get email within
+  seconds; the scheduled worker above is the retry backstop, not the primary path.
+- `ORDER_ALERT_EMAIL` is the owner's notification inbox (there is no more `ORDER_ALERT_PHONE` —
+  that WhatsApp-only alert number was removed from `lib/site.ts`).
+- `EMAIL_AUTOMATION_ENABLED=false` is a kill switch: `sendEmail()` short-circuits as a permanent
+  failure without calling Resend, if sending ever needs to be paused without touching other config.
 
 ## Checkout flow
 
-`createCheckoutOrder()` in `lib/repository.ts`: upserts the customer by phone (dedup key),
-creates the order + order_items, then `recordConfirmation()` fires: the customer's WhatsApp
-order-confirmation template, and a freeform WhatsApp alert to the merchant, sent to
-`ORDER_ALERT_PHONE` in `lib/site.ts` (a private number, separate from the public
-`BUSINESS_PHONE` WhatsApp line). The merchant alert message (`merchantOrderAlert()` in
-`lib/whatsapp.ts`) includes the delivery address and a link to the order's dashboard card
-(`{SITE_URL}/dashboard#{orderId}`). The checkout form also does phone-based customer lookup
-(`/api/vonga/customers/lookup`) to auto-fill name/email/address for returning customers — no
-login wall, just recognition by phone number.
+`createCheckoutOrder()` in `lib/repository.ts` validates the email server-side, then calls the
+`create_checkout_order` Postgres RPC, which — in one transaction — upserts the customer by phone
+(dedup key), inserts the order + order_items, and inserts the two initial `notification_jobs`
+rows (customer confirmation + merchant alert), each keyed with a dedup key like
+`order:<id>:customer-confirmation:v1` so retries can never create a duplicate order or duplicate
+email. The client sends a per-checkout-attempt `idempotencyKey` (generated once per attempt in
+`storefront.tsx`, cleared only after a successful response) so repeat clicks or network retries
+return the original order instead of creating a second one. The checkout form also does
+phone-based customer lookup (`/api/vonga/customers/lookup`) to auto-fill name/email/address for
+returning customers — no login wall, just recognition by phone number.
 
-`ORDER_ALERT_PHONE` (+27 63 318 8924) only needs to be added as a verified test recipient in
-Meta's console if the WhatsApp app is still in Development Mode (App Dashboard → WhatsApp →
-API Setup → "To" → manage phone number list, verified with an OTP) — it does not need any
-sender-side registration since it's a recipient, not the sending number.
+Status changes (`updateOrderStatus()`) insert a row into `order_status_events` (so a dedup key
+can reference a specific transition, since an order may legitimately revisit the same status)
+and a matching `notification_jobs` row, skipping entirely on a no-op (same-status) update and
+logging (not throwing) when an older order has no email on file.
 
 ## Merchant dashboard
 
@@ -87,7 +111,8 @@ here). Current login email is `info@vonga.co.za`; the password is **not** record
 
 Required keys: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
 `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_MERCHANT_SLUG` (=`vonga`), `DASHBOARD_PASSWORD`,
-`AUTH_SECRET`, `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `MAILCHIMP_API_KEY`,
+`AUTH_SECRET`, `RESEND_API_KEY`, `ORDER_EMAIL_FROM`, `ORDER_EMAIL_REPLY_TO`,
+`ORDER_ALERT_EMAIL`, `NOTIFICATION_WORKER_SECRET`, `MAILCHIMP_API_KEY`,
 `MAILCHIMP_AUDIENCE_ID`. If working in a fresh environment (not this same machine), these need
 to be recreated manually — ask the project owner, don't regenerate/rotate them without asking.
 
