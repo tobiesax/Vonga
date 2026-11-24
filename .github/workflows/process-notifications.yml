@@ -1,0 +1,26 @@
+name: Process notification jobs
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Call the notification worker endpoint
+        env:
+          NOTIFICATION_WORKER_URL: ${{ secrets.NOTIFICATION_WORKER_URL }}
+          NOTIFICATION_WORKER_SECRET: ${{ secrets.NOTIFICATION_WORKER_SECRET }}
+        run: |
+          test -n "$NOTIFICATION_WORKER_URL"
+          test -n "$NOTIFICATION_WORKER_SECRET"
+          curl --fail-with-body --silent --show-error \
+            --max-time 60 \
+            -X POST "$NOTIFICATION_WORKER_URL" \
+            -H "Authorization: Bearer $NOTIFICATION_WORKER_SECRET"
