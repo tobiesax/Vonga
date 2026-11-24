@@ -1,3 +1,4 @@
+import { after } from "next/server";
 import { MERCHANT_ID, products as localProducts } from "./catalog";
 import { readStore, updateStore } from "./store";
 import type { Order, OrderItem, OrderStatus, Product, StoreData } from "./types";
@@ -91,7 +92,7 @@ export async function createCheckoutOrder(input: CheckoutInput): Promise<Order> 
     subtotal: money(row.subtotal), deliveryFee: money(row.delivery_fee), total: money(row.total), status: row.status as OrderStatus, createdAt: row.created_at,
   };
 
-  void processDueNotificationJobs(10).catch((err) => console.error("Notification processing failed:", err));
+  after(() => processDueNotificationJobs(10).catch((err) => console.error("Notification processing failed:", err)));
   return order;
 }
 
@@ -186,7 +187,7 @@ export async function updateOrderStatus(id: string, status: OrderStatus) {
       recipient_email: email, recipient_name: data.customer_name, payload: { status },
     });
     if (jobError) console.error("Failed to enqueue status notification:", jobError.message);
-    else void processDueNotificationJobs(5).catch((err) => console.error("Notification processing failed:", err));
+    else after(() => processDueNotificationJobs(5).catch((err) => console.error("Notification processing failed:", err)));
   } else {
     console.warn(`Order ${data.id} has no email on file; skipping status notification.`);
   }
