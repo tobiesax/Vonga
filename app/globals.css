@@ -243,24 +243,10 @@ footer{display:block;padding:0}.footerBottom span{float:none}
 @keyframes vongaFloatIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @media(max-width:800px){.vonga .floating-bag-summary{display:none}.vonga .whatsapp-concierge{right:14px;bottom:70px;width:48px;height:48px;padding:0;justify-content:center}.vonga .whatsapp-concierge span{display:none}.vonga .whatsapp-concierge img{width:25px;height:25px}.vonga .home-fab{right:14px;bottom:126px;width:44px;height:44px}}
 
-/* Payment-method placeholders */
-.vonga .payment-options{border:0;border-top:1px solid #d5cabc;border-bottom:1px solid #d5cabc;padding:19px 0;margin:9px 0 3px;display:grid;gap:16px;max-height:340px;overflow-y:auto}
-.vonga .payment-options legend{font-size:10px;text-transform:uppercase;font-weight:600;letter-spacing:.11em;padding-right:8px}.vonga .payment-options legend small{display:inline-block;margin-left:6px;color:#865511;font-size:8px}
-.vonga .payment-group{display:grid;gap:8px}
-.vonga .payment-group>p{margin:0;font-size:9px;text-transform:uppercase;letter-spacing:.09em;font-weight:600;color:#8a7b6b}
-.vonga .payment-options label{display:grid;grid-template-columns:18px 1fr;align-items:center;gap:10px;border:1px solid #d5cabc;background:rgba(255,255,255,.45);padding:11px 12px;cursor:pointer}.vonga .payment-options label:has(input:checked){border-color:#865511;background:#fffaf2;box-shadow:inset 3px 0 #865511}.vonga .payment-options input{width:15px;height:15px;margin:0;accent-color:#865511}.vonga .payment-options span{display:grid;gap:2px}.vonga .payment-options b{font-size:11px}.vonga .payment-options small{font-size:9px;color:#73685c}
-
-/* Bag line removal, checkout back-nav, and order confirmation */
+/* Bag line removal and checkout back-nav */
 .vonga .bag-remove{border:0;background:none;padding:0;margin-top:6px;font-size:9px;letter-spacing:.04em;text-decoration:underline;color:#8a7b6b;cursor:pointer;text-align:left}
 .vonga .bag-remove:hover{color:#865511}
 .vonga .checkout-back{display:inline-flex;align-items:center;gap:6px;border:0;background:none;padding:0;margin-bottom:16px;font-size:10px;text-transform:uppercase;letter-spacing:.09em;font-weight:600;color:#865511;cursor:pointer}
-.vonga .order-confirm{display:grid;justify-items:center;text-align:center;padding:30px 0 10px}
-.vonga .order-confirm-icon{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:#865511;color:#fff;margin-bottom:18px}
-.vonga .order-confirm-icon svg{width:26px}
-.vonga .order-confirm h2{margin:4px 0 16px}
-.vonga .order-confirm-id{font-size:13px;font-weight:600;color:#1d1712;margin:0 0 12px}
-.vonga .order-confirm-copy{font-size:12px;line-height:1.7;color:#5e554b;max-width:340px;margin:0 0 28px}
-.vonga .order-confirm .drawer-checkout{width:auto;padding:16px 32px}
 
 /* Rotating Vonga mastery seal */
 .vonga .disc{width:122px;height:122px;display:grid;place-items:center;background:rgba(20,15,9,.86);border:1px solid rgba(197,150,65,.55);box-shadow:0 0 0 7px rgba(181,132,46,.1),0 14px 35px rgba(16,11,5,.25);backdrop-filter:blur(2px);transition:transform .3s ease,background .3s ease}
@@ -297,7 +283,7 @@ footer{display:block;padding:0}.footerBottom span{float:none}
   .vonga .credibility{padding:55px 20px}.vonga .credibility h2{font-size:35px}.vonga .credibility article{padding:20px 8px}
   .vonga footer{padding-bottom:82px}.vonga .footer-links{grid-template-columns:1fr 1fr;gap:28px}.vonga .copyright span{float:none;display:block;margin:8px 0 0}
   .v-modal-layer{padding:0;align-items:end}.product-modal{width:100%;max-height:96vh}.product-modal-image{min-height:auto;max-height:50vh}.product-modal-image img{max-height:50vh}.product-modal-copy{padding:28px 20px}.product-modal-copy h2{font-size:36px}.product-description{margin:15px 0}.product-modal-copy fieldset{margin:17px 0}
-  .bag-drawer{width:100%;padding:42px 20px 100px}.payment-options label{padding:10px}
+  .bag-drawer{width:100%;padding:42px 20px 100px}
   .vonga .whatsapp-concierge{bottom:72px}.vonga .home-fab{bottom:128px}.vonga .mobile-actions{left:0;right:0;bottom:0}.vonga .mobile-actions button{min-height:52px}
 }
 @media(max-width:370px){.vonga .hero-copy{left:20px}.vonga .hero-copy h1{font-size:50px}.vonga .product-row article{flex-basis:82vw}.vonga .product-photo{height:405px}.vonga .v-logo img{height:26px}.vonga .footer-links{grid-template-columns:1fr}}

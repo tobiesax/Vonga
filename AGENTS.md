@@ -17,6 +17,9 @@ already been established. Read this before making changes.
   business verification are used anywhere in this codebase anymore.
 - **Mailchimp** — newsletter signups sync here for campaign sending (composing/sending
   campaigns happens in Mailchimp's own dashboard, not in this codebase).
+- **PayFast** — the only checkout payment method (added 25 November 2026; see "Checkout
+  payment — PayFast" below). Runs in sandbox mode by default; `PAYFAST_MODE=live` plus the
+  merchant's own credentials switch it to real payments once the merchant account is verified.
 
 ## Where things live
 
@@ -82,6 +85,43 @@ notifications anymore — only the `wa.me` concierge link remains, and it's just
 - `EMAIL_AUTOMATION_ENABLED=false` is a kill switch: `sendEmail()` short-circuits as a permanent
   failure without calling Resend, if sending ever needs to be paused without touching other config.
 
+## Checkout payment — PayFast
+
+PayFast is the only checkout payment method; the storefront's old multi-option payment-method
+picker (card/Yoco/Ozow/SnapScan/etc.) was always decorative ("Preview only" — no provider was
+wired up) and has been removed entirely.
+
+- `lib/payfast.ts` — signature generation (`phpUrlEncode` + MD5, matching PayFast's own PHP SDK
+  algorithm exactly — insertion order, not alphabetical; see `tests/payfast.test.ts` for a
+  signature verified against an independently hand-derived fixture) and `buildPaymentFields()`.
+  `getPayfastConfig()` defaults to PayFast's public sandbox credentials in `PAYFAST_MODE=sandbox`
+  (the default); `PAYFAST_MODE=live` requires `PAYFAST_MERCHANT_ID`/`PAYFAST_MERCHANT_KEY`/
+  `PAYFAST_PASSPHRASE` to be set explicitly and throws if they're missing — it never silently
+  falls back to sandbox credentials in live mode.
+- `app/api/payfast/redirect/route.ts` — after `createCheckoutOrder` succeeds, the storefront
+  navigates the browser here (`/api/payfast/redirect?order=<id>`); it looks the order up, builds
+  the signed PayFast fields server-side (the passphrase never reaches the browser) and returns
+  an auto-submitting HTML form that POSTs to PayFast's hosted payment page.
+- `app/api/payfast/notify/route.ts` — the ITN (Instant Transaction Notification) webhook PayFast
+  calls server-to-server once payment completes/fails/is cancelled. Validates, in order: the
+  signature, the merchant ID, a server-to-server confirmation POST to PayFast's own
+  `/eng/query/validate` endpoint (must respond `VALID` — this is what stops a forged POST from
+  being trusted, not the signature check alone), then the amount. Only after all of that does it
+  update the order.
+- On `payment_status=COMPLETE`, it calls the existing `updateOrderStatus(id, "confirmed")` —
+  reusing the status that was already wired to the "Payment confirmed" customer email in
+  `STATUS_COPY` (`lib/email-templates.ts`) before PayFast existed. Only bumps status if the order
+  is still `new`/`payment_pending`, so a late/retried ITN can't regress an order the owner has
+  already moved further in the dashboard Kanban. Every outcome (complete/failed/cancelled) is
+  also logged to `automation_events` via `recordPayfastPayment()` in `lib/repository.ts`, so it
+  shows in the dashboard's existing "Automation log" panel with no new UI needed.
+- `app/checkout/success` / `app/checkout/cancelled` — PayFast's `return_url`/`cancel_url` land
+  here (plain pages, not part of the storefront SPA, since the browser left and came back from
+  PayFast's own domain).
+- As of 25 November 2026 the business hadn't yet completed PayFast's own merchant verification
+  (FICA documents) — sandbox mode is safe to leave running until that's done; don't flip
+  `PAYFAST_MODE=live` without the real merchant credentials in hand.
+
 ## Checkout flow
 
 `createCheckoutOrder()` in `lib/repository.ts` validates the email server-side, then calls the
@@ -113,7 +153,8 @@ Required keys: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
 `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_MERCHANT_SLUG` (=`vonga`), `DASHBOARD_PASSWORD`,
 `AUTH_SECRET`, `RESEND_API_KEY`, `ORDER_EMAIL_FROM`, `ORDER_EMAIL_REPLY_TO`,
 `ORDER_ALERT_EMAIL`, `NOTIFICATION_WORKER_SECRET`, `MAILCHIMP_API_KEY`,
-`MAILCHIMP_AUDIENCE_ID`. If working in a fresh environment (not this same machine), these need
+`MAILCHIMP_AUDIENCE_ID`, `PAYFAST_MODE` (plus `PAYFAST_MERCHANT_ID`/`PAYFAST_MERCHANT_KEY`/
+`PAYFAST_PASSPHRASE` once `PAYFAST_MODE=live`). If working in a fresh environment (not this same machine), these need
 to be recreated manually — ask the project owner, don't regenerate/rotate them without asking.
 
 ## Business facts (for structured data / copy consistency)

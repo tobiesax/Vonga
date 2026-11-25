@@ -61,9 +61,7 @@ function layout(title: string, bodyHtml: string) {
 }
 
 export function orderReceivedEmail(order: EmailOrder): Template {
-  const paymentNote = order.paymentMethod
-    ? `Your chosen payment preference: ${escapeHtml(order.paymentMethod)}. This records your preference only — it does not confirm that payment has been received.`
-    : "No payment preference was recorded for this order.";
+  const paymentNote = "We're confirming your PayFast payment now. You'll get a separate email the moment it's received.";
   const html = layout("Your order has been received", `
     <p>Hi ${escapeHtml(order.customerName)},</p>
     <p>We've received your Vonga order. Our atelier will be in touch if anything needs confirming.</p>
@@ -106,7 +104,7 @@ export function newOrderOwnerEmail(order: EmailOrder & { email: string }): Templ
     <table style="width:100%;border-top:1px solid #e3ddd4;border-bottom:1px solid #e3ddd4;margin:12px 0;">${itemsHtml(order.items)}</table>
     <p><b>Total:</b> ${escapeHtml(money(order.total))}</p>
     <p><b>Deliver to:</b><br/>${escapeHtml(order.address)}</p>
-    <p><b>Payment preference:</b> ${escapeHtml(order.paymentMethod || "Not specified")}</p>
+    <p><b>Payment:</b> Awaiting PayFast confirmation</p>
     ${notesHtml}
   `);
   const text = `Order ${order.id} — ${dateLabel(order.createdAt)}
@@ -118,7 +116,7 @@ ${itemsText(order.items)}
 
 Total: ${money(order.total)}
 Deliver to: ${order.address}
-Payment preference: ${order.paymentMethod || "Not specified"}${notesText}`;
+Payment: Awaiting PayFast confirmation${notesText}`;
   return { subject: `New order — ${order.id}`, html, text };
 }
 

@@ -194,3 +194,40 @@ export async function updateOrderStatus(id: string, status: OrderStatus) {
 
   return { id: data.id, status };
 }
+
+export async function getOrderById(id: string): Promise<Order | null> {
+  if (!isSupabaseConfigured()) {
+    requireLocalModeAllowed();
+    const data = await readStore();
+    return data.orders.find((entry) => entry.id === id && entry.merchantId === MERCHANT_ID) ?? null;
+  }
+  const admin = createSupabaseAdminClient();
+  const merchant = await merchantId();
+  const { data, error } = await admin.from("orders").select("id,merchant_id,customer_id,customer_name,phone,email,address,notes,payment_method,status,subtotal,delivery_fee,total,created_at").eq("merchant_id", merchant).eq("id", id).maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) return null;
+  const { data: items, error: itemsError } = await admin.from("order_items").select("product_external_id,name,size,price,quantity").eq("order_id", id);
+  if (itemsError) throw new Error(itemsError.message);
+  return {
+    id: data.id, merchantId: data.merchant_id, customerId: data.customer_id, customerName: data.customer_name,
+    phone: data.phone, email: data.email ?? "", address: data.address, notes: data.notes ?? "", paymentMethod: data.payment_method ?? "",
+    items: (items ?? []).map((item) => ({ productId: item.product_external_id as string, name: item.name as string, size: (item.size as string) ?? "", price: money(item.price), quantity: item.quantity as number })),
+    subtotal: money(data.subtotal), deliveryFee: money(data.delivery_fee), total: money(data.total), status: data.status as OrderStatus, createdAt: data.created_at,
+  };
+}
+
+export async function recordPayfastPayment(order: Order, outcome: { paymentStatus: string; pfPaymentId: string; amount: number }) {
+  if (!isSupabaseConfigured()) { requireLocalModeAllowed(); return; }
+  const admin = createSupabaseAdminClient();
+  const normalized = outcome.paymentStatus.toUpperCase();
+  const type = normalized === "COMPLETE" ? "payment_confirmed" : normalized === "CANCELLED" ? "payment_cancelled" : "payment_failed";
+  const eventStatus = normalized === "COMPLETE" ? "sent" : "failed";
+  const amountLabel = new Intl.NumberFormat("en-ZA", { style: "currency", currency: "ZAR" }).format(outcome.amount);
+  await admin.from("automation_events").insert({
+    merchant_id: order.merchantId, type, order_id: order.id, status: eventStatus,
+    message: `PayFast ${outcome.paymentStatus || "unknown"} — ref ${outcome.pfPaymentId || "n/a"}, ${amountLabel}`,
+  });
+  if (normalized === "COMPLETE" && (order.status === "new" || order.status === "payment_pending")) {
+    await updateOrderStatus(order.id, "confirmed");
+  }
+}
