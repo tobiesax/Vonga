@@ -21,9 +21,9 @@ npm run build
 ## Commerce
 
 - Product discovery, quick view, sizing, wishlist and persistent bag
-- Order-request checkout with placeholder payment preferences, backed by Supabase and a durable
-  transactional-email outbox (order confirmation, merchant alert, status-change emails — see
-  "Email automation" in `AGENTS.md`)
+- Checkout with real PayFast payment (see "Checkout payment — PayFast" in `AGENTS.md`), backed by
+  Supabase and a durable transactional-email outbox (order confirmation, merchant alert,
+  status-change emails — see "Email automation" in `AGENTS.md`)
 - Appointment requests
 - WhatsApp concierge — a manual `wa.me` chat link only; no automated WhatsApp messaging
 

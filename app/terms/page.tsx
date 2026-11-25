@@ -17,7 +17,7 @@ export default function TermsPage() {
     <p>These terms govern the purchase of ready-to-wear and made-to-measure garments from Vonga, a fashion atelier based in Menlyn, Pretoria. By placing an order with us, you agree to these terms.</p>
 
     <h2>2. Orders</h2>
-    <p>An order request submitted through the website is a request to purchase, not a confirmed sale. Our atelier will contact you to confirm sizing, availability and payment before your order is finalised. Prices are listed in South African Rand (ZAR) and are subject to change without notice until an order is confirmed.</p>
+    <p>Payment is taken securely via PayFast at checkout. Once payment is confirmed, your order is placed and our atelier will be in touch if anything needs confirming on sizing or availability. Prices are listed in South African Rand (ZAR).</p>
 
     <h2>3. Made-to-Measure &amp; Bespoke Orders</h2>
     <p>Bespoke and made-to-measure garments are cut and finished to the measurements provided at consultation. Because these pieces are made specifically for you, they are excluded from exchange unless the garment is defective or does not match the agreed specification.</p>
@@ -35,7 +35,7 @@ export default function TermsPage() {
     <p>We offer nationwide delivery within South Africa. Delivery timeframes and fees are confirmed at checkout or by our atelier team. Free delivery applies to orders over R5,000.</p>
 
     <h2>6. Payment</h2>
-    <p>Full or partial payment may be required to confirm an order, depending on the item and lead time. Payment options are confirmed directly with our atelier.</p>
+    <p>Payment is processed securely by PayFast, a licensed South African payment gateway. We do not see or store your card or banking details. Full payment is required at checkout to confirm an order.</p>
 
     <h2>7. Intellectual Property</h2>
     <p>All designs, photography and content on this website belong to Vonga and may not be reproduced without permission.</p>

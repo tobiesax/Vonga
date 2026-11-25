@@ -7,7 +7,7 @@ const baseOrder: EmailOrder = {
   phone: "+27821234567",
   address: "1 Main Road, Pretoria",
   notes: "",
-  paymentMethod: "card",
+  paymentMethod: "payfast",
   items: [{ name: "Chartreuse Satin Ballgown", size: "M", quantity: 1, price: 4400 }],
   subtotal: 4400,
   deliveryFee: 120,
@@ -20,7 +20,7 @@ describe("orderReceivedEmail", () => {
     const { html, text } = orderReceivedEmail(baseOrder);
     expect(html.toLowerCase()).not.toContain("payment received");
     expect(text.toLowerCase()).not.toContain("payment received");
-    expect(html).toContain("does not confirm that payment has been received");
+    expect(html).toContain("We're confirming your PayFast payment now");
   });
 
   it("formats currency as ZAR and escapes free-text notes", () => {
@@ -41,13 +41,13 @@ describe("orderReceivedEmail", () => {
 });
 
 describe("newOrderOwnerEmail", () => {
-  it("includes customer contact, items, total and payment preference", () => {
+  it("includes customer contact, items, total and payment status", () => {
     const { text } = newOrderOwnerEmail({ ...baseOrder, email: "jane@example.com" });
     expect(text).toContain("Jane Doe");
     expect(text).toContain("+27821234567");
     expect(text).toContain("jane@example.com");
     expect(text).toContain("Chartreuse Satin Ballgown");
-    expect(text).toContain("card");
+    expect(text).toContain("Awaiting PayFast confirmation");
   });
 });
 
